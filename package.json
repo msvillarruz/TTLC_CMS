@@ -1,0 +1,31 @@
+{
+  "name": "ttlc-cms",
+  "version": "1.0.0",
+  "description": "Tiny Thinkers Learning Center CMS — Powered by Payload 3",
+  "license": "UNLICENSED",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "payload dev",
+    "build": "payload build",
+    "start": "payload serve",
+    "generate:types": "payload generate:types",
+    "generate:graphql": "payload generate:graphQLSchema"
+  },
+  "dependencies": {
+    "@payloadcms/db-postgres": "^3.0.0",
+    "@payloadcms/richtext-lexical": "^3.0.0",
+    "payload": "^3.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "5.5.4"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  }
+}

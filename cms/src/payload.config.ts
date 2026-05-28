@@ -17,6 +17,7 @@ export default buildConfig({
   admin: {
     user: 'users',
   },
+  secret: process.env.PAYLOAD_SECRET || '',
   collections: [
     Users,
     Programs,

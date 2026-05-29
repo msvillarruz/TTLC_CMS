@@ -110,7 +110,7 @@ export const Programs: CollectionConfig = {
       name: 'programType',
       type: 'select',
       label: 'Program Type',
-      defaultValue: 'regular',
+      defaultValue: 'toddler',
       options: [
         { label: 'Toddler', value: 'toddler' },
         { label: 'Junior Nursery', value: 'junior-nursery' },

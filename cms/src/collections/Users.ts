@@ -6,7 +6,7 @@ export const Users: CollectionConfig = {
     tokenExpiration: 604800,
     cookies: {
       secure: false,
-      sameSite: 'lax',
+      sameSite: 'Lax',
     },
   },
   admin: {

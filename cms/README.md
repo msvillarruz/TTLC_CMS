@@ -98,3 +98,4 @@ POST /api/revalidate        → Webhook to trigger Next.js ISR (secured)
 ## Changelog
 
 See `/CHANGELOG.md`
+

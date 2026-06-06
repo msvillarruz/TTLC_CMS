@@ -28,11 +28,19 @@ export default function CustomLoginPage() {
       }
 
       const token = data?.token
-      if (token) {
-        document.cookie = `payload-token=${token}; path=/; SameSite=Lax`
+      if (!token) {
+        setError('Login failed: no token returned')
+        return
       }
 
-      window.location.href = '/admin'
+      const setAuth = await fetch('/api/set-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token }),
+        redirect: 'follow',
+      })
+
+      window.location.href = setAuth.url || '/admin'
     } catch {
       setError('Network error. Please try again.')
     } finally {

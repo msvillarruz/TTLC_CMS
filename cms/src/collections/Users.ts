@@ -4,6 +4,7 @@ export const Users: CollectionConfig = {
   slug: 'users',
   auth: {
     tokenExpiration: 604800,
+    verify: false,
     cookies: {
       secure: false,
       sameSite: 'Lax',

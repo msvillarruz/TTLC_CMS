@@ -44,6 +44,7 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
+  cookiePrefix: 'payload',
   cors: [
     process.env.NEXT_PUBLIC_SITE_URL || '',
     'http://eyuvq0lrx9nsuh0xo7e89brq.5.223.65.121.sslip.io',

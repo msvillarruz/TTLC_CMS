@@ -46,13 +46,15 @@ export default buildConfig({
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
   cookiePrefix: 'payload',
   cors: [
-    process.env.NEXT_PUBLIC_SITE_URL || '',
     'http://eyuvq0lrx9nsuh0xo7e89brq.5.223.65.121.sslip.io',
+    'https://eyuvq0lrx9nsuh0xo7e89brq.5.223.65.121.sslip.io',
     'https://tinythinkers.edu.ph',
-  ].filter(Boolean),
+    'https://cms.tinythinkers.edu.ph',
+  ],
   csrf: [
-    process.env.NEXT_PUBLIC_SITE_URL || '',
     'http://eyuvq0lrx9nsuh0xo7e89brq.5.223.65.121.sslip.io',
+    'https://eyuvq0lrx9nsuh0xo7e89brq.5.223.65.121.sslip.io',
     'https://tinythinkers.edu.ph',
-  ].filter(Boolean),
+    'https://cms.tinythinkers.edu.ph',
+  ],
 })

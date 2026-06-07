@@ -1,3 +1,4 @@
+import sharp from 'sharp'
 import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
@@ -44,6 +45,7 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
+  sharp,
   cors: [
     'http://eyuvq0lrx9nsuh0xo7e89brq.5.223.65.121.sslip.io',
     'https://eyuvq0lrx9nsuh0xo7e89brq.5.223.65.121.sslip.io',

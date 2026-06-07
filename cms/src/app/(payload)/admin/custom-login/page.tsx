@@ -37,10 +37,15 @@ export default function CustomLoginPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token }),
-        redirect: 'follow',
+        credentials: 'include',
       })
 
-      window.location.href = setAuth.url || '/admin'
+      if (!setAuth.ok) {
+        setError('Failed to set auth cookie')
+        return
+      }
+
+      window.location.href = '/admin'
     } catch {
       setError('Network error. Please try again.')
     } finally {

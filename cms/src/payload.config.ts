@@ -44,14 +44,7 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
-  cookiePrefix: 'payload',
   cors: [
-    'http://eyuvq0lrx9nsuh0xo7e89brq.5.223.65.121.sslip.io',
-    'https://eyuvq0lrx9nsuh0xo7e89brq.5.223.65.121.sslip.io',
-    'https://tinythinkers.edu.ph',
-    'https://cms.tinythinkers.edu.ph',
-  ],
-  csrf: [
     'http://eyuvq0lrx9nsuh0xo7e89brq.5.223.65.121.sslip.io',
     'https://eyuvq0lrx9nsuh0xo7e89brq.5.223.65.121.sslip.io',
     'https://tinythinkers.edu.ph',

@@ -1,5 +1,6 @@
 import sharp from 'sharp'
 import { buildConfig } from 'payload'
+import { s3Storage } from '@payloadcms/storage-s3'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
@@ -46,6 +47,22 @@ export default buildConfig({
   },
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
   sharp,
+  plugins: [
+    s3Storage({
+      collections: {
+        media: true,
+      },
+      bucket: process.env.S3_BUCKET || 'ttlc-media',
+      config: {
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+        },
+        region: 'auto',
+        endpoint: process.env.S3_ENDPOINT || '',
+      },
+    }),
+  ],
   cors: [
     'http://eyuvq0lrx9nsuh0xo7e89brq.5.223.65.121.sslip.io',
     'https://eyuvq0lrx9nsuh0xo7e89brq.5.223.65.121.sslip.io',

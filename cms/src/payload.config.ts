@@ -52,8 +52,9 @@ export default buildConfig({
     defaultFromName: process.env.SMTP_FROM_NAME || 'Tiny Thinkers Learning Center',
     transportOptions: {
       host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
+      port: 587,
+      secure: false,
+      requireTLS: true,
       auth: {
         user: process.env.SMTP_USER || '',
         pass: process.env.SMTP_PASS || '',

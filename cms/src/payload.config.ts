@@ -1,6 +1,7 @@
 import sharp from 'sharp'
 import { buildConfig } from 'payload'
 import { s3Storage } from '@payloadcms/storage-s3'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
@@ -46,6 +47,19 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
+  email: nodemailerAdapter({
+    defaultFromAddress: process.env.SMTP_FROM_EMAIL || 'hello@tinythinkers.edu.ph',
+    defaultFromName: process.env.SMTP_FROM_NAME || 'Tiny Thinkers Learning Center',
+    transportOptions: {
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.SMTP_USER || '',
+        pass: process.env.SMTP_PASS || '',
+      },
+    },
+  }),
   sharp,
   plugins: [
     s3Storage({

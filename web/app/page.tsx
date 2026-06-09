@@ -221,6 +221,96 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* TESTIMONIALS */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2
+              className="text-3xl sm:text-4xl font-900 text-ink mb-3"
+              style={{ fontFamily: 'var(--font-display)' }}
+            >
+              What Parents Say
+            </h2>
+            <p className="text-ink/60 max-w-xl mx-auto">
+              Hear from families who&apos;ve experienced the Tiny Thinkers difference.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[
+              {
+                quote: 'My daughter absolutely loves going to school every single day. The teachers know her by name, know her quirks, and make her feel so special.',
+                name: 'Sarah M.',
+                label: 'Parent · Brainy Bunch',
+                tagColor: '#E91E8C',
+              },
+              {
+                quote: 'As a working mom, I was worried about screen time and passive learning. TTLC showed me what intentional, hands-on education looks like.',
+                name: 'Ana C.',
+                label: 'Parent · Crayon Crew',
+                tagColor: '#FFD600',
+              },
+              {
+                quote: 'The teachers actually know each child individually — their quirks, their strengths, what makes them tick. That personal attention is rare.',
+                name: 'Rhea P.',
+                label: 'Parent · Epic Explorers',
+                tagColor: '#06B6D4',
+              },
+              {
+                quote: 'The one-on-one tutorials are a lifesaver. My son was behind on reading, but after just a few sessions, he started recognizing words on his own.',
+                name: 'Karen M.',
+                label: 'Parent · Tutorials',
+                tagColor: '#7C4DFF',
+              },
+              {
+                quote: 'I love how transparent the teachers are. I get updates throughout the day and always feel informed. It\'s not just a school — it\'s a partnership.',
+                name: 'Diane V.',
+                label: 'Parent · Daycare',
+                tagColor: '#FF6D3B',
+              },
+            ].map((t) => (
+              <div
+                key={t.name}
+                className="flex flex-col bg-white rounded-2xl p-6"
+                style={{ boxShadow: '0 4px 20px rgba(26,26,46,0.07)', border: '1px solid #f3f4f6' }}
+              >
+                {/* Stars */}
+                <div className="flex gap-0.5 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="#FFD600">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                  ))}
+                </div>
+                {/* Quote */}
+                <p className="text-ink/70 leading-relaxed text-sm flex-1 mb-5">
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                {/* Attribution */}
+                <div className="flex items-center gap-3 mt-auto">
+                  <div
+                    className="w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center text-white text-sm font-900"
+                    style={{ background: t.tagColor, fontFamily: 'var(--font-display)' }}
+                  >
+                    {t.name[0]}
+                  </div>
+                  <div>
+                    <p className="text-sm font-800 text-ink leading-none" style={{ fontFamily: 'var(--font-display)' }}>
+                      {t.name}
+                    </p>
+                    <span
+                      className="text-xs font-700 mt-1 inline-block px-2 py-0.5 rounded-full text-white"
+                      style={{ background: t.tagColor, fontFamily: 'var(--font-display)' }}
+                    >
+                      {t.label}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* PARENT JOURNEY */}
       <section
         className="py-20 px-4"

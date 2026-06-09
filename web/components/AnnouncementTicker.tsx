@@ -1,16 +1,17 @@
-'use client'
+import { getAnnouncements } from '@/lib/api'
 
-import type { Announcement } from '@/lib/api'
-
-export default function AnnouncementTicker({ announcements }: { announcements: Announcement[] }) {
+export default async function AnnouncementTicker() {
+  const announcements = await getAnnouncements().catch(() => [])
   if (!announcements.length) return null
 
   const items = [...announcements, ...announcements]
+  const hasUrgent = announcements.some((a) => a.severity === 'urgent')
+  const bg = hasUrgent ? '#EF4444' : '#E91E8C'
 
   return (
     <div
-      className="overflow-hidden bg-pink py-2"
-      style={{ fontFamily: 'var(--font-display)' }}
+      className="overflow-hidden py-2"
+      style={{ background: bg, fontFamily: 'var(--font-display)' }}
     >
       <div
         className="flex whitespace-nowrap animate-ticker"
@@ -25,6 +26,9 @@ export default function AnnouncementTicker({ announcements }: { announcements: A
               className="inline-block w-2 h-2 rounded-full bg-white opacity-80"
               aria-hidden="true"
             />
+            {a.severity === 'urgent' && (
+              <span className="font-900 mr-1">⚠️</span>
+            )}
             {a.message}
           </span>
         ))}

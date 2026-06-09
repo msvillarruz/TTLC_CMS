@@ -53,6 +53,39 @@ export type Announcement = {
   updatedAt: string
 }
 
+export type Category = {
+  id: number
+  name: string
+  slug: string
+  color?: string
+}
+
+export type Article = {
+  id: number
+  title: string
+  slug: string
+  status: 'draft' | 'published'
+  publishedAt?: string
+  excerpt?: string
+  body?: unknown
+  heroImage?: { url: string; alt?: string }
+  author?: { id: number; name: string; role?: string }
+  categories?: Category[]
+}
+
+export type Event = {
+  id: number
+  title: string
+  slug: string
+  date: string
+  endDate?: string
+  location?: string
+  description?: unknown
+  heroImage?: { url: string; alt?: string }
+  status: 'upcoming' | 'past' | 'cancelled'
+  registrationLink?: string
+}
+
 export type TrialRequestPayload = {
   childName: string
   childBirthday: string
@@ -102,6 +135,30 @@ export async function getAnnouncements(): Promise<Announcement[]> {
     '/announcements?where[isActive][equals]=true&sort=-publishDate&limit=50'
   )
   return data.docs
+}
+
+export async function getArticles(): Promise<Article[]> {
+  const data = await fetchCMS<{ docs: Article[] }>(
+    '/articles?where[status][equals]=published&depth=1&limit=20&sort=-publishedAt'
+  )
+  return data.docs
+}
+
+export async function getArticle(slug: string): Promise<Article | null> {
+  const data = await fetchCMS<{ docs: Article[] }>(
+    `/articles?where[slug][equals]=${slug}&where[status][equals]=published&depth=1&limit=1`
+  )
+  return data.docs[0] ?? null
+}
+
+export async function getEvents(): Promise<Event[]> {
+  const data = await fetchCMS<{ docs: Event[] }>('/events?depth=1&limit=20&sort=date')
+  return data.docs
+}
+
+export async function getEvent(slug: string): Promise<Event | null> {
+  const data = await fetchCMS<{ docs: Event[] }>(`/events?where[slug][equals]=${slug}&depth=1&limit=1`)
+  return data.docs[0] ?? null
 }
 
 export async function submitTrialRequest(payload: TrialRequestPayload): Promise<{ ok: boolean; message?: string }> {

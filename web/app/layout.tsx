@@ -4,7 +4,7 @@ import './globals.css'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import AnnouncementTicker from '@/components/AnnouncementTicker'
-import { getAnnouncements, getPrograms, getSiteSettings } from '@/lib/api'
+import { getPrograms, getSiteSettings } from '@/lib/api'
 
 const nunito = Nunito({
   subsets: ['latin'],
@@ -31,8 +31,7 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const [announcements, programs, siteSettings] = await Promise.all([
-    getAnnouncements().catch(() => []),
+  const [programs, siteSettings] = await Promise.all([
     getPrograms().catch(() => []),
     getSiteSettings().catch(() => ({})),
   ])
@@ -41,7 +40,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={`${nunito.variable} ${lora.variable}`}>
       <body>
-        <AnnouncementTicker announcements={announcements} />
+        <AnnouncementTicker />
         <Nav logoUrl={logoUrl} />
         <main>{children}</main>
         <Footer programs={programs} logoUrl={logoUrl} />

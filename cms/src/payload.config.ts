@@ -65,7 +65,12 @@ export default buildConfig({
   plugins: [
     s3Storage({
       collections: {
-        media: true,
+        media: {
+          generateFileURL: ({ filename }) => {
+            const base = process.env.S3_PUBLIC_URL
+            return base ? `${base}/${filename}` : `/api/media/file/${encodeURIComponent(filename)}`
+          },
+        },
       },
       bucket: process.env.S3_BUCKET || 'ttlc-media',
       config: {
@@ -76,7 +81,6 @@ export default buildConfig({
         region: 'auto',
         endpoint: process.env.S3_ENDPOINT || '',
       },
-      baseUrl: process.env.S3_PUBLIC_URL || '',
     }),
   ],
   cors: [

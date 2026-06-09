@@ -76,6 +76,7 @@ export default buildConfig({
         region: 'auto',
         endpoint: process.env.S3_ENDPOINT || '',
       },
+      baseUrl: process.env.S3_PUBLIC_URL || '',
     }),
   ],
   cors: [

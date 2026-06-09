@@ -10,6 +10,10 @@ const nextConfig: NextConfig = {
         hostname: 'cms.tinythinkers.edu.ph',
         pathname: '/media/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'pub-8405156a37534ba6a6153480e5de5d7d.r2.dev',
+      },
     ],
   },
 }

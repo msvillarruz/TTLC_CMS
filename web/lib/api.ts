@@ -1,4 +1,11 @@
 const CMS = process.env.NEXT_PUBLIC_CMS_URL || 'https://cms.tinythinkers.edu.ph'
+const R2_PUBLIC_URL = process.env.NEXT_PUBLIC_R2_PUBLIC_URL || ''
+
+export function resolveMediaUrl(url?: string): string | undefined {
+  if (!url) return undefined
+  if (url.startsWith('/') && R2_PUBLIC_URL) return `${R2_PUBLIC_URL}${url}`
+  return url
+}
 
 export type Program = {
   id: number
@@ -72,7 +79,10 @@ export async function getProgram(slug: string): Promise<Program | null> {
 
 export async function getAuthors(): Promise<Author[]> {
   const data = await fetchCMS<{ docs: Author[] }>('/authors?limit=100&sort=createdAt')
-  return data.docs
+  return data.docs.map((a) => ({
+    ...a,
+    photo: a.photo ? { ...a.photo, url: resolveMediaUrl(a.photo.url) ?? a.photo.url } : undefined,
+  }))
 }
 
 export async function getSiteSettings(): Promise<SiteSettings> {

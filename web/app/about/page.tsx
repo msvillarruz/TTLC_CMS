@@ -95,44 +95,80 @@ export default async function AboutPage() {
       <section className="py-16 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <h2
-            className="text-2xl sm:text-3xl font-900 text-ink text-center mb-10"
+            className="text-2xl sm:text-3xl font-900 text-ink text-center mb-14"
             style={{ fontFamily: 'var(--font-display)' }}
           >
             Meet the Team
           </h2>
           {authors.length === 0 ? (
             <p className="text-center text-ink/40 py-10">No team members found.</p>
-          ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-              {authors.map((a) => (
-                <div key={a.id} className="text-center">
-                  <div
-                    className="w-20 h-20 rounded-2xl mx-auto mb-3 flex items-center justify-center text-white text-2xl font-black overflow-hidden"
-                    style={{ background: 'var(--color-teal)', fontFamily: 'var(--font-display)' }}
-                  >
-                    {a.photo?.url ? (
-                      <Image
-                        src={a.photo.url}
-                        alt={a.photo.alt || a.name}
-                        width={80}
-                        height={80}
-                        className="w-full h-full object-cover"
+          ) : (() => {
+            const leadership = authors.filter((a) =>
+              ['School Head', 'Academic Lead', 'Head of EdTech', 'Corporate Secretary'].includes(a.role ?? '')
+            )
+            const faculty = authors.filter((a) => a.role?.includes('Head Teacher'))
+            const support = authors.filter((a) => a.role?.includes('Teacher Aide'))
+
+            const groups = [
+              { label: 'Admin & Leadership', members: leadership, color: 'var(--color-pink)' },
+              { label: 'Faculty & Academic Team', members: faculty, color: 'var(--color-teal)' },
+              { label: 'Operations & Support', members: support, color: 'var(--color-purple)' },
+            ]
+
+            return (
+              <div className="space-y-14">
+                {groups.map((group) => group.members.length > 0 && (
+                  <div key={group.label}>
+                    <div className="flex items-center gap-4 mb-8">
+                      <div
+                        className="h-0.5 w-8 rounded-full flex-shrink-0"
+                        style={{ background: group.color }}
                       />
-                    ) : (
-                      a.name[0]
-                    )}
+                      <h3
+                        className="text-base font-800 uppercase tracking-widest"
+                        style={{ fontFamily: 'var(--font-display)', color: group.color }}
+                      >
+                        {group.label}
+                      </h3>
+                      <div
+                        className="h-0.5 flex-1 rounded-full opacity-20"
+                        style={{ background: group.color }}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                      {group.members.map((a) => (
+                        <div key={a.id} className="text-center">
+                          <div
+                            className="w-20 h-20 rounded-2xl mx-auto mb-3 flex items-center justify-center text-white text-2xl font-black overflow-hidden"
+                            style={{ background: group.color, fontFamily: 'var(--font-display)' }}
+                          >
+                            {a.photo?.url ? (
+                              <Image
+                                src={a.photo.url}
+                                alt={a.photo.alt || a.name}
+                                width={80}
+                                height={80}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              a.name[0]
+                            )}
+                          </div>
+                          <p
+                            className="text-sm font-800 text-ink"
+                            style={{ fontFamily: 'var(--font-display)' }}
+                          >
+                            {a.name}
+                          </p>
+                          <p className="text-xs text-ink/50 mt-0.5">{a.role}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <p
-                    className="text-sm font-800 text-ink"
-                    style={{ fontFamily: 'var(--font-display)' }}
-                  >
-                    {a.name}
-                  </p>
-                  <p className="text-xs text-ink/50 mt-0.5">{a.role}</p>
-                </div>
-              ))}
-            </div>
-          )}
+                ))}
+              </div>
+            )
+          })()}
         </div>
       </section>
     </div>

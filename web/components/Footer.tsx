@@ -31,7 +31,7 @@ export default function Footer({ programs, logoUrl }: { programs: Program[]; log
               <img
                 src={logoUrl}
                 alt="Tiny Thinkers Learning Center"
-                style={{ height: '48px', width: 'auto', objectFit: 'contain', marginBottom: '12px', filter: 'brightness(0) invert(1)' }}
+                style={{ height: '120px', width: 'auto', objectFit: 'contain', marginBottom: '12px', filter: 'brightness(0) invert(1)' }}
               />
             ) : (
               <>

@@ -10,7 +10,7 @@ const links = [
   { label: 'Contact', href: '/contact' },
 ]
 
-export default function Nav() {
+export default function Nav({ logoUrl }: { logoUrl?: string }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -20,18 +20,29 @@ export default function Nav() {
     >
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <span
-            className="text-2xl font-black tracking-tight text-pink"
-            style={{ fontFamily: 'var(--font-display)' }}
-          >
-            Tiny Thinkers
-          </span>
-          <span
-            className="text-xs font-bold text-teal uppercase tracking-widest hidden sm:block"
-            style={{ fontFamily: 'var(--font-display)' }}
-          >
-            Learning Center
-          </span>
+          {logoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={logoUrl}
+              alt="Tiny Thinkers Learning Center"
+              style={{ height: '36px', width: 'auto', objectFit: 'contain' }}
+            />
+          ) : (
+            <>
+              <span
+                className="text-2xl font-black tracking-tight text-pink"
+                style={{ fontFamily: 'var(--font-display)' }}
+              >
+                Tiny Thinkers
+              </span>
+              <span
+                className="text-xs font-bold text-teal uppercase tracking-widest hidden sm:block"
+                style={{ fontFamily: 'var(--font-display)' }}
+              >
+                Learning Center
+              </span>
+            </>
+          )}
         </Link>
 
         {/* Desktop */}

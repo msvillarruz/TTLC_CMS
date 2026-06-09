@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { getPrograms, getAuthors, getSiteSettings, resolveColor } from '@/lib/api'
+import { getPrograms, getAuthors, getSiteSettings, getHomePage } from '@/lib/api'
 import ProgramCard from '@/components/ProgramCard'
 
 export const revalidate = 3600
@@ -14,14 +14,15 @@ const objectives = [
 ]
 
 export default async function HomePage() {
-  const [programs, authors, settings] = await Promise.all([
+  const [programs, authors, settings, homePage] = await Promise.all([
     getPrograms().catch(() => []),
     getAuthors().catch(() => []),
     getSiteSettings().catch((): import('@/lib/api').SiteSettings => ({})),
+    getHomePage().catch((): import('@/lib/api').HomePage => ({})),
   ])
 
-  const headline = settings.heroHeadline || 'Where Little Minds Make Big Leaps'
-  const subline = settings.heroSubline || 'Play-based early education for children ages 1–9 in Caloocan, Philippines.'
+  const headline = homePage.heroHeadline || 'Your child\'s best beginning'
+  const subline = homePage.heroSubline || 'A play-based learning center dedicated to fostering curiosity, creativity, and confidence in every child.'
 
   return (
     <>

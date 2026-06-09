@@ -31,13 +31,17 @@ export type Author = {
 }
 
 export type SiteSettings = {
-  heroHeadline?: string
-  heroSubline?: string
   mission?: string
   address?: string
   phone?: string
   email?: string
   mapEmbedUrl?: string
+  logo?: { url: string; alt?: string }
+}
+
+export type HomePage = {
+  heroHeadline?: string
+  heroSubline?: string
 }
 
 export type Announcement = {
@@ -87,6 +91,10 @@ export async function getAuthors(): Promise<Author[]> {
 
 export async function getSiteSettings(): Promise<SiteSettings> {
   return fetchCMS<SiteSettings>('/globals/site-settings')
+}
+
+export async function getHomePage(): Promise<HomePage> {
+  return fetchCMS<HomePage>('/globals/home-page')
 }
 
 export async function getAnnouncements(): Promise<Announcement[]> {

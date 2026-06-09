@@ -44,7 +44,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <AnnouncementTicker announcements={announcements} />
         <Nav logoUrl={logoUrl} />
         <main>{children}</main>
-        <Footer programs={programs} />
+        <Footer programs={programs} logoUrl={logoUrl} />
       </body>
     </html>
   )

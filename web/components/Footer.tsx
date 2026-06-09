@@ -19,25 +19,36 @@ const socialLinks = [
   },
 ]
 
-export default function Footer({ programs }: { programs: Program[] }) {
+export default function Footer({ programs, logoUrl }: { programs: Program[]; logoUrl?: string }) {
   return (
     <footer className="bg-ink text-white pt-12 pb-6">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
           {/* Brand */}
           <div className="md:col-span-1">
-            <p
-              className="text-2xl font-black text-pink mb-1"
-              style={{ fontFamily: 'var(--font-display)' }}
-            >
-              Tiny Thinkers
-            </p>
-            <p
-              className="text-xs font-bold text-teal uppercase tracking-widest mb-3"
-              style={{ fontFamily: 'var(--font-display)' }}
-            >
-              Learning Center
-            </p>
+            {logoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={logoUrl}
+                alt="Tiny Thinkers Learning Center"
+                style={{ height: '48px', width: 'auto', objectFit: 'contain', marginBottom: '12px', filter: 'brightness(0) invert(1)' }}
+              />
+            ) : (
+              <>
+                <p
+                  className="text-2xl font-black text-pink mb-1"
+                  style={{ fontFamily: 'var(--font-display)' }}
+                >
+                  Tiny Thinkers
+                </p>
+                <p
+                  className="text-xs font-bold text-teal uppercase tracking-widest mb-3"
+                  style={{ fontFamily: 'var(--font-display)' }}
+                >
+                  Learning Center
+                </p>
+              </>
+            )}
             <p className="text-sm text-white/60 leading-relaxed">
               Nurturing curious minds through play-based learning in a safe, joyful environment.
             </p>

@@ -110,59 +110,144 @@ export default async function AboutPage() {
             const support = authors.filter((a) => a.role?.includes('Teacher Aide'))
 
             const groups = [
-              { label: 'Admin & Leadership', members: leadership, color: 'var(--color-pink)' },
-              { label: 'Faculty & Academic Team', members: faculty, color: 'var(--color-teal)' },
-              { label: 'Operations & Support', members: support, color: 'var(--color-purple)' },
+              { label: 'Admin & Leadership', members: leadership, color: '#E91E8C' },
+              { label: 'Faculty & Academic Team', members: faculty, color: '#009688' },
+              { label: 'Operations & Support', members: support, color: '#7C4DFF' },
             ]
 
             return (
               <div className="space-y-14">
                 {groups.map((group) => group.members.length > 0 && (
                   <div key={group.label}>
+                    {/* Group heading */}
                     <div className="flex items-center gap-4 mb-8">
-                      <div
-                        className="h-0.5 w-8 rounded-full flex-shrink-0"
-                        style={{ background: group.color }}
-                      />
+                      <div className="h-0.5 w-8 rounded-full flex-shrink-0" style={{ background: group.color }} />
                       <h3
                         className="text-base font-800 uppercase tracking-widest"
                         style={{ fontFamily: 'var(--font-display)', color: group.color }}
                       >
                         {group.label}
                       </h3>
-                      <div
-                        className="h-0.5 flex-1 rounded-full opacity-20"
-                        style={{ background: group.color }}
-                      />
+                      <div className="h-0.5 flex-1 rounded-full opacity-20" style={{ background: group.color }} />
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                      {group.members.map((a) => (
-                        <div key={a.id} className="text-center">
+
+                    {/* Cards */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+                      {group.members.map((a) => {
+                        const firstName = a.name.split(' ')[0]
+                        return (
                           <div
-                            className="w-20 h-20 rounded-2xl mx-auto mb-3 flex items-center justify-center text-white text-2xl font-black overflow-hidden"
-                            style={{ background: group.color, fontFamily: 'var(--font-display)' }}
+                            key={a.id}
+                            style={{
+                              border: `2px solid ${group.color}`,
+                              borderRadius: '12px',
+                              overflow: 'hidden',
+                              boxShadow: '0 4px 16px rgba(26,26,46,0.09)',
+                              background: '#fff',
+                            }}
                           >
-                            {a.photo?.url ? (
-                              <Image
-                                src={a.photo.url}
-                                alt={a.photo.alt || a.name}
-                                width={80}
-                                height={80}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              a.name[0]
-                            )}
+                            {/* Photo area — 3:4 portrait */}
+                            <div style={{ position: 'relative', aspectRatio: '3/4', display: 'flex' }}>
+                              {/* Vertical name strip */}
+                              <div
+                                style={{
+                                  width: '28px',
+                                  flexShrink: 0,
+                                  background: group.color,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  overflow: 'hidden',
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    color: 'white',
+                                    fontSize: '10px',
+                                    fontWeight: 800,
+                                    fontFamily: 'var(--font-display)',
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.12em',
+                                    writingMode: 'vertical-lr',
+                                    whiteSpace: 'nowrap',
+                                  }}
+                                >
+                                  {firstName}
+                                </span>
+                              </div>
+
+                              {/* Photo or initial */}
+                              <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
+                                {a.photo?.url ? (
+                                  <Image
+                                    src={a.photo.url}
+                                    alt={a.photo.alt || a.name}
+                                    fill
+                                    className="object-cover object-top"
+                                  />
+                                ) : (
+                                  <div
+                                    style={{
+                                      width: '100%',
+                                      height: '100%',
+                                      background: `${group.color}18`,
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                    }}
+                                  >
+                                    <span
+                                      style={{
+                                        fontSize: '3rem',
+                                        fontWeight: 900,
+                                        color: group.color,
+                                        fontFamily: 'var(--font-display)',
+                                        opacity: 0.6,
+                                      }}
+                                    >
+                                      {a.name[0]}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Info */}
+                            <div style={{ padding: '10px 10px 12px' }}>
+                              <p
+                                style={{
+                                  fontFamily: 'var(--font-display)',
+                                  fontWeight: 800,
+                                  fontSize: '10px',
+                                  textTransform: 'uppercase',
+                                  letterSpacing: '0.04em',
+                                  color: '#1A1A2E',
+                                  marginBottom: '6px',
+                                  lineHeight: 1.4,
+                                }}
+                              >
+                                {a.name}
+                              </p>
+                              <span
+                                style={{
+                                  display: 'inline-block',
+                                  background: '#FF6D3B',
+                                  color: 'white',
+                                  fontSize: '8px',
+                                  fontWeight: 700,
+                                  fontFamily: 'var(--font-display)',
+                                  padding: '2px 7px',
+                                  borderRadius: '100px',
+                                  textTransform: 'uppercase',
+                                  letterSpacing: '0.04em',
+                                }}
+                              >
+                                {a.role}
+                              </span>
+                            </div>
                           </div>
-                          <p
-                            className="text-sm font-800 text-ink"
-                            style={{ fontFamily: 'var(--font-display)' }}
-                          >
-                            {a.name}
-                          </p>
-                          <p className="text-xs text-ink/50 mt-0.5">{a.role}</p>
-                        </div>
-                      ))}
+                        )
+                      })}
                     </div>
                   </div>
                 ))}

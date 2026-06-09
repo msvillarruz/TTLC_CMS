@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url'
 import { Users } from './collections/Users'
 import { Programs } from './collections/Programs'
 import { Articles } from './collections/Articles'
+import { Testimonials } from './collections/Testimonials'
 import { Events, Announcements, TrialRequests, Authors, Categories, Media, Parents } from './collections/index'
 import { SiteSettings, HomePage } from './globals/index'
 
@@ -25,6 +26,7 @@ export default buildConfig({
     Users,
     Programs,
     Articles,
+    Testimonials,
     Events,
     Announcements,
     TrialRequests,

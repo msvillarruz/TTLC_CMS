@@ -87,6 +87,20 @@ export type Event = {
   registrationLink?: string
 }
 
+export type Testimonial = {
+  id: number
+  parentName: string
+  programName: string
+  quote: string
+  rating: number
+  isActive: boolean
+  source: 'facebook' | 'google' | 'direct'
+  order: number
+  testimonialType: 'text' | 'video'
+  videoFile?: { url: string; alt?: string; mimeType?: string }
+  videoUrl?: string
+}
+
 export type TrialRequestPayload = {
   childName: string
   childBirthday: string
@@ -160,6 +174,13 @@ export async function getEvents(): Promise<Event[]> {
 export async function getEvent(slug: string): Promise<Event | null> {
   const data = await fetchCMS<{ docs: Event[] }>(`/events?where[slug][equals]=${slug}&depth=1&limit=1`)
   return data.docs[0] ?? null
+}
+
+export async function getTestimonials(): Promise<Testimonial[]> {
+  const data = await fetchCMS<{ docs: Testimonial[] }>(
+    '/testimonials?where[isActive][equals]=true&sort=order&limit=20&depth=1'
+  )
+  return data.docs
 }
 
 export async function submitTrialRequest(payload: TrialRequestPayload): Promise<{ ok: boolean; message?: string }> {

@@ -25,7 +25,7 @@ export default function Nav({ logoUrl }: { logoUrl?: string }) {
             <img
               src={logoUrl}
               alt="Tiny Thinkers Learning Center"
-              style={{ height: '48px', width: 'auto', objectFit: 'contain' }}
+              style={{ height: '56px', width: 'auto', objectFit: 'contain' }}
             />
           ) : (
             <>

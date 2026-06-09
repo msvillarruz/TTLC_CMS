@@ -37,6 +37,7 @@ export type SiteSettings = {
   email?: string
   mapEmbedUrl?: string
   logo?: { url: string; alt?: string }
+  footerLogo?: { url: string; alt?: string }
 }
 
 export type HomePage = {

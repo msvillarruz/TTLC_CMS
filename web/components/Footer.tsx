@@ -19,17 +19,18 @@ const socialLinks = [
   },
 ]
 
-export default function Footer({ programs, logoUrl }: { programs: Program[]; logoUrl?: string }) {
+export default function Footer({ programs, logoUrl, footerLogoUrl }: { programs: Program[]; logoUrl?: string; footerLogoUrl?: string }) {
+  const displayLogoUrl = footerLogoUrl || logoUrl
   return (
     <footer className="bg-ink text-white pt-12 pb-6">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
           {/* Brand */}
           <div className="md:col-span-1">
-            {logoUrl ? (
+            {displayLogoUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={logoUrl}
+                src={displayLogoUrl}
                 alt="Tiny Thinkers Learning Center"
                 style={{ height: '120px', width: 'auto', objectFit: 'contain', marginBottom: '12px', filter: 'brightness(0) invert(1)' }}
               />

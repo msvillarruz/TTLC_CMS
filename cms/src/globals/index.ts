@@ -24,6 +24,7 @@ export const SiteSettings: GlobalConfig = {
             { name: 'tagline', type: 'text', required: true, defaultValue: "Your child's best beginning" },
             { name: 'footerTagline', type: 'text', defaultValue: 'Fostering curious minds and happy hearts.' },
             { name: 'logo', type: 'upload', relationTo: 'media', label: 'School Logo' },
+            { name: 'footerLogo', type: 'upload', relationTo: 'media', label: 'Footer Logo' },
             { name: 'favicon', type: 'upload', relationTo: 'media', label: 'Favicon' },
           ],
         },

@@ -35,7 +35,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     getPrograms().catch(() => []),
     getSiteSettings().catch(() => ({})),
   ])
-  const logoUrl = (siteSettings as import('@/lib/api').SiteSettings).logo?.url
+  const settings = siteSettings as import('@/lib/api').SiteSettings
+  const logoUrl = settings.logo?.url
+  const footerLogoUrl = settings.footerLogo?.url
 
   return (
     <html lang="en" className={`${nunito.variable} ${lora.variable}`}>
@@ -43,7 +45,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <AnnouncementTicker />
         <Nav logoUrl={logoUrl} />
         <main>{children}</main>
-        <Footer programs={programs} logoUrl={logoUrl} />
+        <Footer programs={programs} logoUrl={logoUrl} footerLogoUrl={footerLogoUrl} />
       </body>
     </html>
   )

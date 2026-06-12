@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Nunito, Lora } from 'next/font/google'
+import { Nunito } from 'next/font/google'
 import './globals.css'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
@@ -13,19 +13,12 @@ const nunito = Nunito({
   display: 'swap',
 })
 
-const lora = Lora({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-lora',
-  display: 'swap',
-})
-
 export const metadata: Metadata = {
-  title: 'Tiny Thinkers Learning Center',
-  description: 'Nurturing curious minds through play-based learning in Caloocan, Philippines.',
+  title: "Tiny Thinkers Learning Center | Your Child's Best Beginning",
+  description: 'A progressive playschool in Quezon City for children ages 1.5 to 5 years. Play-based, holistic, small-class learning since 2024.',
   openGraph: {
-    title: 'Tiny Thinkers Learning Center',
-    description: 'Nurturing curious minds through play-based learning.',
+    title: "Tiny Thinkers Learning Center | Your Child's Best Beginning",
+    description: 'A progressive playschool in Quezon City for children ages 1.5 to 5 years. Play-based, holistic, small-class learning since 2024.',
     siteName: 'Tiny Thinkers Learning Center',
   },
 }
@@ -40,7 +33,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const footerLogoUrl = settings.footerLogo?.url
 
   return (
-    <html lang="en" className={`${nunito.variable} ${lora.variable}`}>
+    <html lang="en" className={nunito.variable}>
       <body>
         <AnnouncementTicker />
         <Nav logoUrl={logoUrl} />

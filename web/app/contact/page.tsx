@@ -20,13 +20,10 @@ export default async function ContactPage() {
       {/* Header */}
       <section
         className="py-16 px-4 text-center"
-        style={{ background: 'linear-gradient(135deg, #FFF5FB 0%, #F0FFF8 100%)' }}
+        style={{ background: 'linear-gradient(135deg, #FFF5FB 0%, #F0FFFE 100%)' }}
       >
-        <h1
-          className="text-4xl sm:text-5xl font-900 text-ink mb-4"
-          style={{ fontFamily: 'var(--font-display)' }}
-        >
-          Book a Free Trial
+        <h1 className="text-4xl sm:text-5xl font-black text-ink mb-4">
+          Let&apos;s start your child&apos;s journey together 💛
         </h1>
         <p className="text-ink/60 max-w-xl mx-auto text-lg">
           Let your child experience the Tiny Thinkers magic — no fees, no commitment.
@@ -44,14 +41,9 @@ export default async function ContactPage() {
           <div className="space-y-6">
             <div
               className="rounded-2xl p-6"
-              style={{ background: 'var(--color-surface)', boxShadow: '0 2px 12px rgba(26,26,46,0.06)' }}
+              style={{ background: 'var(--color-surface)', boxShadow: '0 2px 12px rgba(28,43,74,0.06)' }}
             >
-              <h3
-                className="font-800 text-ink mb-4"
-                style={{ fontFamily: 'var(--font-display)' }}
-              >
-                Contact Us
-              </h3>
+              <h3 className="font-extrabold text-ink mb-4">Contact Us</h3>
               <div className="space-y-3 text-sm text-ink/70">
                 {settings.address && (
                   <p className="flex gap-2">
@@ -76,20 +68,18 @@ export default async function ContactPage() {
                   </p>
                 )}
                 {!settings.address && !settings.phone && !settings.email && (
-                  <>
-                    <p className="flex gap-2">
-                      <span>✉️</span>
-                      <a href="mailto:hello@tinythinkers.edu.ph" className="hover:text-pink transition-colors">
-                        hello@tinythinkers.edu.ph
-                      </a>
-                    </p>
-                  </>
+                  <p className="flex gap-2">
+                    <span>✉️</span>
+                    <a href="mailto:hello@tinythinkers.edu.ph" className="hover:text-pink transition-colors">
+                      hello@tinythinkers.edu.ph
+                    </a>
+                  </p>
                 )}
               </div>
             </div>
 
             {settings.mapEmbedUrl && (
-              <div className="rounded-2xl overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(26,26,46,0.06)' }}>
+              <div className="rounded-2xl overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(28,43,74,0.06)' }}>
                 <iframe
                   src={settings.mapEmbedUrl}
                   width="100%"

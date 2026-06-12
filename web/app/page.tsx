@@ -2,15 +2,49 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getPrograms, getAuthors, getSiteSettings, getHomePage, getTestimonials } from '@/lib/api'
 import ProgramCard from '@/components/ProgramCard'
+import { OBJECTIVES, PROGRAM_COLORS } from '@/lib/content'
 
 export const revalidate = 3600
 
-const objectives = [
-  { icon: '🎮', title: 'Play-Based Learning', desc: 'Hands-on activities that turn curiosity into discovery.' },
-  { icon: '🛡️', title: 'Safe Environment', desc: 'A nurturing space where every child feels secure and valued.' },
-  { icon: '🌟', title: 'Skills Discovery', desc: 'Uncovering each child\'s unique strengths and talents.' },
-  { icon: '🤝', title: 'Parent Partnership', desc: 'Families as active partners in every learning journey.' },
-  { icon: '💬', title: 'Open Communication', desc: 'Transparent, consistent connection between home and school.' },
+const journeyStages = [
+  {
+    title: 'Awareness',
+    subtitle: 'What is Tiny Thinkers?',
+    color: '#4DC9D3',
+    bgColor: '#E8F9FA',
+    icon: '👀',
+    chips: ['School tour video', 'Curriculum overview', 'Our approach', 'Meet the teachers'],
+  },
+  {
+    title: 'Consideration',
+    subtitle: 'Does TTLC fit our needs?',
+    color: '#F9C215',
+    bgColor: '#FFFBEA',
+    icon: '🤔',
+    chips: ['Book a school visit', 'Tuition & schedules', 'Parent testimonials', 'Chat with us'],
+  },
+  {
+    title: 'Decision',
+    subtitle: 'Is TTLC the right fit?',
+    color: '#E83D8F',
+    bgColor: '#FEF0F6',
+    icon: '🎯',
+    chips: ['Trial class booking', 'Meet the teachers', 'Tuition breakdown', 'Parent Q&A'],
+  },
+  {
+    title: 'Enrollment',
+    subtitle: 'We are ready! 🎉',
+    color: '#F47B35',
+    bgColor: '#FFF4EE',
+    icon: '🎒',
+    chips: ['Online enrollment form', 'Requirements checklist', 'Orientation schedule', 'Welcome to TTLC!'],
+  },
+]
+
+const featuredNames = [
+  'Carla Irel B. Villarruz',
+  'Renee Therese D. Baquilar',
+  'Angel Rita T. Mutuc',
 ]
 
 export default async function HomePage() {
@@ -22,80 +56,106 @@ export default async function HomePage() {
     getTestimonials().catch(() => []),
   ])
 
-  const headline = homePage.heroHeadline || 'Your child\'s best beginning'
+  const headline = homePage.heroHeadline || "Your child's best beginning"
   const subline = homePage.heroSubline || 'A play-based learning center dedicated to fostering curiosity, creativity, and confidence in every child.'
+
+  const featuredAuthors = featuredNames
+    .map((name) => authors.find((a) => a.name === name))
+    .filter((a): a is NonNullable<typeof a> => Boolean(a))
+  const teamPreview = featuredAuthors.length >= 2 ? featuredAuthors : authors.slice(0, 3)
 
   return (
     <>
       {/* HERO */}
       <section
-        className="relative overflow-hidden py-24 px-4"
-        style={{ background: 'linear-gradient(135deg, #FFF5FB 0%, #F0FFF8 50%, #FFF8E7 100%)' }}
+        className="relative overflow-hidden py-20 px-4 animate-fade-up"
+        style={{ background: 'linear-gradient(135deg, #FFF5FB 0%, #F0FFFE 100%)' }}
       >
-        {/* Floating decoratives */}
-        <div
-          className="absolute top-12 right-8 w-20 h-20 rounded-full opacity-20 animate-float"
-          style={{ background: 'var(--color-pink)' }}
-          aria-hidden="true"
-        />
-        <div
-          className="absolute bottom-16 left-12 w-14 h-14 rounded-xl opacity-20 animate-float"
-          style={{ background: 'var(--color-teal)', animationDelay: '1s' }}
-          aria-hidden="true"
-        />
-        <div
-          className="absolute top-32 left-1/4 w-10 h-10 rounded-full opacity-15 animate-wiggle"
-          style={{ background: 'var(--color-yellow)' }}
-          aria-hidden="true"
-        />
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left: Text */}
+            <div>
+              <span
+                className="inline-block px-4 py-1.5 rounded-full text-sm font-extrabold text-white mb-6"
+                style={{ background: '#4DC9D3' }}
+              >
+                🌱 Enrolling Now
+              </span>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-ink mb-6 leading-tight">
+                {headline}
+              </h1>
+              <p className="text-lg sm:text-xl text-ink/70 max-w-lg mb-10 leading-relaxed">
+                {subline}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  href="/contact"
+                  className="px-8 py-4 rounded-2xl text-base font-extrabold text-white transition-transform hover:scale-105"
+                  style={{ background: '#E83D8F', boxShadow: '0 6px 24px rgba(232,61,143,0.30)' }}
+                >
+                  Schedule a Free Trial ✨
+                </Link>
+                <Link
+                  href="/programs"
+                  className="px-8 py-4 rounded-2xl text-base font-extrabold text-ink border-2 border-ink/20 hover:border-ink/40 transition-colors"
+                >
+                  Explore Programs →
+                </Link>
+              </div>
+            </div>
 
-        <div className="max-w-4xl mx-auto text-center animate-fade-up">
-          <span
-            className="inline-block px-4 py-1.5 rounded-full text-sm font-800 text-white mb-6"
-            style={{ background: 'var(--color-teal)', fontFamily: 'var(--font-display)' }}
-          >
-            🌱 Enrolling Now
-          </span>
-          <h1
-            className="text-4xl sm:text-5xl md:text-6xl font-900 text-ink mb-6 leading-tight"
-            style={{ fontFamily: 'var(--font-display)' }}
-          >
-            {headline}
-          </h1>
-          <p className="text-lg sm:text-xl text-ink/70 max-w-2xl mx-auto mb-10 leading-relaxed">
-            {subline}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/contact"
-              className="px-8 py-4 rounded-2xl text-base font-800 text-white transition-transform hover:scale-105"
-              style={{ background: 'var(--color-pink)', fontFamily: 'var(--font-display)', boxShadow: '0 6px 24px rgba(233,30,140,0.3)' }}
+            {/* Right: Visual placeholder */}
+            <div
+              className="rounded-3xl flex flex-col items-center justify-center py-16 px-8 text-center"
+              style={{
+                background: '#FEF0F6',
+                border: '2px dashed #E83D8F',
+                minHeight: '280px',
+              }}
             >
-              Book a Free Trial
-            </Link>
-            <Link
-              href="/programs"
-              className="px-8 py-4 rounded-2xl text-base font-800 text-ink border-2 border-ink/20 hover:border-ink/40 transition-colors"
-              style={{ fontFamily: 'var(--font-display)' }}
-            >
-              Explore Programs →
-            </Link>
+              <span style={{ fontSize: '80px', lineHeight: 1 }}>🎒</span>
+              <p
+                className="mt-5 text-base font-semibold"
+                style={{ color: '#E83D8F' }}
+              >
+                School photos coming soon!
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* PROGRAMS PREVIEW */}
-      <section className="py-20 px-4 bg-white">
+      {/* CREDIBILITY STRIP */}
+      <section
+        className="py-6 px-4 animate-fade-up"
+        style={{ background: '#1C2B4A', animationDelay: '0.1s' }}
+      >
+        <div className="max-w-6xl mx-auto flex flex-wrap justify-center gap-8">
+          {[
+            { icon: '🏫', label: '8 Programs' },
+            { icon: '👶', label: 'Ages 1.5 to 5+' },
+            { icon: '👩‍🏫', label: 'Max 8 Kids per Class' },
+            { icon: '📍', label: 'Quezon City, PH' },
+            { icon: '🗓️', label: 'Since August 2024' },
+          ].map((stat) => (
+            <div key={stat.label} className="flex items-center gap-2 text-white font-bold text-sm">
+              <span>{stat.icon}</span>
+              <span>{stat.label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* PROGRAMS */}
+      <section
+        className="py-20 px-4 bg-white animate-fade-up"
+        style={{ animationDelay: '0.15s' }}
+      >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2
-              className="text-3xl sm:text-4xl font-900 text-ink mb-3"
-              style={{ fontFamily: 'var(--font-display)' }}
-            >
-              Our Programs
-            </h2>
+            <h2 className="text-3xl sm:text-4xl font-black text-ink mb-3">Our Programs</h2>
             <p className="text-ink/60 max-w-xl mx-auto">
-              Carefully designed learning experiences for every stage of early childhood.
+              Every child is different — we have a class that&apos;s just right for yours.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
@@ -107,8 +167,7 @@ export default async function HomePage() {
             <div className="text-center mt-10">
               <Link
                 href="/programs"
-                className="inline-block px-6 py-3 rounded-xl font-800 text-pink border-2 border-pink hover:bg-pink hover:text-white transition-colors"
-                style={{ fontFamily: 'var(--font-display)' }}
+                className="inline-block px-6 py-3 rounded-xl font-extrabold text-pink border-2 border-pink hover:bg-pink hover:text-white transition-colors"
               >
                 View All Programs
               </Link>
@@ -117,132 +176,116 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ABOUT SNAPSHOT */}
+      {/* MISSION + OBJECTIVES */}
       <section
-        className="py-20 px-4"
-        style={{ background: 'linear-gradient(135deg, #F0FFF8 0%, #FFF5FB 100%)' }}
+        className="py-20 px-4 animate-fade-up"
+        style={{ background: '#4DC9D3', animationDelay: '0.2s' }}
       >
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2
-                className="text-3xl sm:text-4xl font-900 text-ink mb-4"
-                style={{ fontFamily: 'var(--font-display)' }}
-              >
-                Our Mission
-              </h2>
-              <p className="text-ink/70 text-lg leading-relaxed mb-8">
-                {settings.mission ||
-                  'Tiny Thinkers Learning Center is dedicated to providing a nurturing, play-based environment where young children discover their potential, build confidence, and develop a lifelong love of learning.'}
-              </p>
-              <Link
-                href="/about"
-                className="inline-block px-6 py-3 rounded-xl font-800 text-white bg-teal hover:bg-teal/90 transition-colors"
-                style={{ fontFamily: 'var(--font-display)' }}
-              >
-                Meet the Team
-              </Link>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {objectives.map((obj) => (
-                <div
-                  key={obj.title}
-                  className="bg-white rounded-2xl p-5"
-                  style={{ boxShadow: '0 2px 12px rgba(26,26,46,0.06)' }}
-                >
-                  <div className="text-2xl mb-2">{obj.icon}</div>
-                  <h4
-                    className="font-800 text-ink text-sm mb-1"
-                    style={{ fontFamily: 'var(--font-display)' }}
-                  >
-                    {obj.title}
-                  </h4>
-                  <p className="text-xs text-ink/60 leading-relaxed">{obj.desc}</p>
-                </div>
-              ))}
-            </div>
+          <div className="text-center mb-10">
+            <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">Our Mission</h2>
+            <p className="text-white/85 text-lg leading-relaxed max-w-2xl mx-auto">
+              {settings.mission ||
+                'Tiny Thinkers Learning Center is dedicated to providing a nurturing, play-based environment where young children discover their potential, build confidence, and develop a lifelong love of learning.'}
+            </p>
+            <Link
+              href="/about"
+              className="inline-block mt-6 px-6 py-3 rounded-xl font-extrabold bg-white hover:bg-white/90 transition-colors"
+              style={{ color: '#4DC9D3' }}
+            >
+              Meet the Team
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mt-10">
+            {OBJECTIVES.map((obj) => (
+              <div key={obj.title} className="bg-white/20 rounded-2xl p-5 text-center">
+                <div className="text-2xl mb-2">{obj.icon}</div>
+                <h4 className="font-extrabold text-white text-sm mb-1">{obj.title}</h4>
+                <p className="text-xs text-white/80 leading-relaxed">{obj.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* TEAM PREVIEW */}
-      {authors.length > 0 && (
-        <section className="py-20 px-4 bg-white">
+      {teamPreview.length > 0 && (
+        <section
+          className="py-20 px-4 bg-white animate-fade-up"
+          style={{ animationDelay: '0.25s' }}
+        >
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2
-                className="text-3xl sm:text-4xl font-900 text-ink mb-3"
-                style={{ fontFamily: 'var(--font-display)' }}
-              >
-                Meet Our Team
-              </h2>
+              <h2 className="text-3xl sm:text-4xl font-black text-ink mb-3">Meet Our Team</h2>
               <p className="text-ink/60 max-w-xl mx-auto">
-                Passionate educators dedicated to your child's growth.
+                Passionate educators dedicated to your child&apos;s growth.
               </p>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
-              {authors.slice(0, 6).map((a) => (
-                <div key={a.id} className="text-center">
-                  <div
-                    className="w-16 h-16 rounded-2xl mx-auto mb-3 flex items-center justify-center text-white text-xl font-black overflow-hidden"
-                    style={{ background: 'var(--color-teal)', fontFamily: 'var(--font-display)' }}
-                  >
-                    {a.photo?.url ? (
-                      <Image
-                        src={a.photo.url}
-                        alt={a.photo.alt || a.name}
-                        width={64}
-                        height={64}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      a.name[0]
-                    )}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-2xl mx-auto">
+              {teamPreview.map((a) => {
+                const accentColor =
+                  a.role?.includes('School Head') || a.role?.includes('Academic Lead')
+                    ? '#E83D8F'
+                    : '#4DC9D3'
+                return (
+                  <div key={a.id} className="text-center">
+                    <div
+                      className="w-20 h-20 rounded-full mx-auto mb-3 flex items-center justify-center text-white text-2xl font-black overflow-hidden"
+                      style={{ background: accentColor }}
+                    >
+                      {a.photo?.url ? (
+                        <Image
+                          src={a.photo.url}
+                          alt={a.photo.alt || a.name}
+                          width={80}
+                          height={80}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        a.name[0]
+                      )}
+                    </div>
+                    <p className="text-sm font-extrabold text-ink leading-tight">{a.name}</p>
+                    <span
+                      className="text-xs font-bold mt-1 inline-block px-3 py-0.5 rounded-full text-white"
+                      style={{ background: accentColor }}
+                    >
+                      {a.role}
+                    </span>
                   </div>
-                  <p
-                    className="text-xs font-800 text-ink leading-tight"
-                    style={{ fontFamily: 'var(--font-display)' }}
-                  >
-                    {a.name.split(' ')[0]}
-                  </p>
-                  <p className="text-xs text-ink/50 mt-0.5">{a.role}</p>
-                </div>
-              ))}
+                )
+              })}
             </div>
             <div className="text-center mt-10">
               <Link
                 href="/about"
-                className="inline-block px-6 py-3 rounded-xl font-800 text-teal border-2 border-teal hover:bg-teal hover:text-white transition-colors"
-                style={{ fontFamily: 'var(--font-display)' }}
+                className="inline-block px-6 py-3 rounded-xl font-extrabold text-teal border-2 border-teal hover:bg-teal hover:text-white transition-colors"
               >
-                View Full Team
+                Meet the full team →
               </Link>
             </div>
           </div>
         </section>
       )}
 
-      {/* TESTIMONIALS — only render if CMS has data */}
+      {/* TESTIMONIALS */}
       {testimonials.length > 0 && (
-        <section className="py-20 px-4 bg-white">
+        <section
+          className="py-20 px-4 animate-fade-up"
+          style={{ background: '#1C2B4A', animationDelay: '0.3s' }}
+        >
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2
-                className="text-3xl sm:text-4xl font-900 text-ink mb-3"
-                style={{ fontFamily: 'var(--font-display)' }}
-              >
-                What Parents Say
-              </h2>
-              <p className="text-ink/60 max-w-xl mx-auto">
+              <h2 className="text-3xl sm:text-4xl font-black text-white mb-3">What Parents Say</h2>
+              <p className="text-white/60 max-w-xl mx-auto">
                 Hear from families who&apos;ve experienced the Tiny Thinkers difference.
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {testimonials.map((t) => {
-                const tagColor = '#009688'
+                const tagColor = PROGRAM_COLORS[t.programName] || '#4DC9D3'
 
                 if (t.testimonialType === 'video') {
-                  // Detect video source
                   const isYouTube = t.videoUrl && (t.videoUrl.includes('youtube.com') || t.videoUrl.includes('youtu.be'))
                   const isFacebook = t.videoUrl && t.videoUrl.includes('facebook.com')
 
@@ -255,10 +298,9 @@ export default async function HomePage() {
                   return (
                     <div
                       key={t.id}
-                      className="flex flex-col bg-white rounded-2xl overflow-hidden"
-                      style={{ boxShadow: '0 4px 20px rgba(26,26,46,0.07)', border: '1px solid #f3f4f6' }}
+                      className="flex flex-col bg-white/10 rounded-2xl overflow-hidden"
+                      style={{ border: '1px solid rgba(255,255,255,0.1)' }}
                     >
-                      {/* Video */}
                       {t.videoFile?.url ? (
                         <video
                           controls
@@ -288,21 +330,18 @@ export default async function HomePage() {
                         />
                       ) : null}
 
-                      {/* Attribution */}
                       <div className="p-4 flex items-center gap-3">
                         <div
-                          className="w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center text-white text-sm font-900"
-                          style={{ background: tagColor, fontFamily: 'var(--font-display)' }}
+                          className="w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center text-white text-sm font-black"
+                          style={{ background: tagColor }}
                         >
                           {t.parentName[0]}
                         </div>
                         <div>
-                          <p className="text-sm font-800 text-ink leading-none" style={{ fontFamily: 'var(--font-display)' }}>
-                            {t.parentName}
-                          </p>
+                          <p className="text-sm font-extrabold text-white leading-none">{t.parentName}</p>
                           <span
-                            className="text-xs font-700 mt-1 inline-block px-2 py-0.5 rounded-full text-white"
-                            style={{ background: tagColor, fontFamily: 'var(--font-display)' }}
+                            className="text-xs font-bold mt-1 inline-block px-2 py-0.5 rounded-full text-white"
+                            style={{ background: tagColor }}
                           >
                             Parent · {t.programName}
                           </span>
@@ -312,40 +351,34 @@ export default async function HomePage() {
                   )
                 }
 
-                // Text testimonial
                 return (
                   <div
                     key={t.id}
-                    className="flex flex-col bg-white rounded-2xl p-6"
-                    style={{ boxShadow: '0 4px 20px rgba(26,26,46,0.07)', border: '1px solid #f3f4f6' }}
+                    className="flex flex-col bg-white/10 rounded-2xl p-6"
+                    style={{ border: '1px solid rgba(255,255,255,0.1)' }}
                   >
-                    {/* Stars */}
                     <div className="flex gap-0.5 mb-4">
                       {[...Array(Math.min(5, Math.max(1, t.rating || 5)))].map((_, i) => (
-                        <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="#FFD600">
+                        <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="#F9C215">
                           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                         </svg>
                       ))}
                     </div>
-                    {/* Quote */}
-                    <p className="text-ink/70 leading-relaxed text-sm flex-1 mb-5">
+                    <p className="text-white/80 leading-relaxed text-sm flex-1 mb-5">
                       &ldquo;{t.quote}&rdquo;
                     </p>
-                    {/* Attribution */}
                     <div className="flex items-center gap-3 mt-auto">
                       <div
-                        className="w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center text-white text-sm font-900"
-                        style={{ background: tagColor, fontFamily: 'var(--font-display)' }}
+                        className="w-9 h-9 rounded-xl flex-shrink-0 flex items-center justify-center text-white text-sm font-black"
+                        style={{ background: tagColor }}
                       >
                         {t.parentName[0]}
                       </div>
                       <div>
-                        <p className="text-sm font-800 text-ink leading-none" style={{ fontFamily: 'var(--font-display)' }}>
-                          {t.parentName}
-                        </p>
+                        <p className="text-sm font-extrabold text-white leading-none">{t.parentName}</p>
                         <span
-                          className="text-xs font-700 mt-1 inline-block px-2 py-0.5 rounded-full text-white"
-                          style={{ background: tagColor, fontFamily: 'var(--font-display)' }}
+                          className="text-xs font-bold mt-1 inline-block px-2 py-0.5 rounded-full text-white"
+                          style={{ background: tagColor }}
                         >
                           Parent · {t.programName}
                         </span>
@@ -361,59 +394,52 @@ export default async function HomePage() {
 
       {/* PARENT JOURNEY */}
       <section
-        className="py-20 px-4"
-        style={{ background: 'linear-gradient(135deg, #FFF8E7 0%, #F0FFF8 100%)' }}
+        className="py-20 px-4 animate-fade-up"
+        style={{ background: '#FFFBEA', animationDelay: '0.35s' }}
       >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2
-              className="text-3xl sm:text-4xl font-900 text-ink mb-3"
-              style={{ fontFamily: 'var(--font-display)' }}
-            >
-              Your Journey Starts Here
-            </h2>
+            <h2 className="text-3xl sm:text-4xl font-black text-ink mb-3">Your Journey Starts Here</h2>
+            <p className="text-ink/60 max-w-xl mx-auto">
+              From first discovery to first day of class — we guide you every step of the way.
+            </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div
-              className="bg-white rounded-3xl p-8"
-              style={{ boxShadow: '0 4px 24px rgba(26,26,46,0.07)' }}
-            >
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {journeyStages.map((stage) => (
               <div
-                className="w-12 h-12 rounded-2xl flex items-center justify-center text-white text-xl mb-5"
-                style={{ background: 'var(--color-pink)' }}
+                key={stage.title}
+                className="rounded-3xl p-7"
+                style={{ background: stage.bgColor, border: `2px solid ${stage.color}20` }}
               >
-                👀
+                <div className="flex items-center gap-3 mb-4">
+                  <div
+                    className="w-11 h-11 rounded-2xl flex items-center justify-center text-xl flex-shrink-0"
+                    style={{ background: stage.color }}
+                  >
+                    {stage.icon}
+                  </div>
+                  <div>
+                    <h3
+                      className="text-lg font-black text-ink leading-tight"
+                    >
+                      {stage.title}
+                    </h3>
+                    <p className="text-sm text-ink/60">{stage.subtitle}</p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {stage.chips.map((chip) => (
+                    <span
+                      key={chip}
+                      className="text-xs font-bold px-3 py-1 rounded-full text-white"
+                      style={{ background: stage.color }}
+                    >
+                      {chip}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <h3
-                className="text-xl font-900 text-ink mb-3"
-                style={{ fontFamily: 'var(--font-display)' }}
-              >
-                Awareness
-              </h3>
-              <p className="text-ink/70 leading-relaxed">
-                Discover why play-based learning sets the foundation for lifelong curiosity, creativity, and academic success. Learn how the Tiny Thinkers approach is different.
-              </p>
-            </div>
-            <div
-              className="bg-white rounded-3xl p-8"
-              style={{ boxShadow: '0 4px 24px rgba(26,26,46,0.07)' }}
-            >
-              <div
-                className="w-12 h-12 rounded-2xl flex items-center justify-center text-white text-xl mb-5"
-                style={{ background: 'var(--color-teal)' }}
-              >
-                🎯
-              </div>
-              <h3
-                className="text-xl font-900 text-ink mb-3"
-                style={{ fontFamily: 'var(--font-display)' }}
-              >
-                Consideration
-              </h3>
-              <p className="text-ink/70 leading-relaxed">
-                Explore our programs by age group, meet the team, and book a free trial class so your child can experience the magic firsthand — no commitment required.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -421,28 +447,21 @@ export default async function HomePage() {
       {/* FOOTER CTA */}
       <section
         className="py-20 px-4 text-center"
-        style={{ background: 'var(--color-ink)' }}
+        style={{ background: 'linear-gradient(135deg, #E83D8F 0%, #C0177A 100%)' }}
       >
         <div className="max-w-2xl mx-auto">
-          <h2
-            className="text-3xl sm:text-4xl font-900 text-white mb-4"
-            style={{ fontFamily: 'var(--font-display)' }}
-          >
-            Ready to give your child the Tiny Thinkers experience?
+          <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
+            Ready to give your little one the best beginning? 🌟
           </h2>
-          <p className="text-white/60 mb-8 text-lg">
+          <p className="text-white/70 mb-8 text-lg">
             Book a free trial class today — no fees, no commitment.
           </p>
           <Link
             href="/contact"
-            className="inline-block px-10 py-4 rounded-2xl text-base font-800 text-white transition-transform hover:scale-105"
-            style={{
-              background: 'var(--color-pink)',
-              fontFamily: 'var(--font-display)',
-              boxShadow: '0 6px 24px rgba(233,30,140,0.4)',
-            }}
+            className="inline-block px-10 py-4 rounded-2xl text-base font-extrabold text-pink bg-white transition-transform hover:scale-105"
+            style={{ boxShadow: '0 6px 24px rgba(0,0,0,0.15)' }}
           >
-            Book a Free Trial
+            Schedule a Free Trial ✨
           </Link>
         </div>
       </section>

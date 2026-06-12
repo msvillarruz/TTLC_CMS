@@ -21,9 +21,8 @@ const labelStyle = {
   display: 'block',
   fontSize: '0.8rem',
   fontWeight: 700,
-  color: 'rgba(26,26,46,0.6)',
+  color: 'rgba(28,43,74,0.6)',
   marginBottom: '0.375rem',
-  fontFamily: 'var(--font-display)',
 }
 
 export default function ContactForm({ programs }: { programs: Program[] }) {
@@ -70,16 +69,13 @@ export default function ContactForm({ programs }: { programs: Program[] }) {
         style={{ background: 'linear-gradient(135deg, #F0FFF8 0%, #FFF5FB 100%)', boxShadow: '0 4px 24px rgba(26,26,46,0.07)' }}
       >
         <div className="text-5xl mb-5">🎉</div>
-        <h2
-          className="text-2xl font-900 text-ink mb-3"
-          style={{ fontFamily: 'var(--font-display)' }}
-        >
+        <h2 className="text-2xl font-black text-ink mb-3">
           You're all set!
         </h2>
         <p className="text-ink/60 leading-relaxed">
           We've received your trial request. Our team will reach out within 24 hours to confirm your schedule.
         </p>
-        <p className="text-sm text-teal font-700 mt-4" style={{ fontFamily: 'var(--font-display)' }}>
+        <p className="text-sm text-teal font-bold mt-4">
           Can't wait to meet your little thinker! 🌟
         </p>
       </div>
@@ -92,10 +88,7 @@ export default function ContactForm({ programs }: { programs: Program[] }) {
       className="bg-white rounded-3xl p-8"
       style={{ boxShadow: '0 4px 24px rgba(26,26,46,0.07)' }}
     >
-      <h2
-        className="text-xl font-900 text-ink mb-6"
-        style={{ fontFamily: 'var(--font-display)' }}
-      >
+      <h2 className="text-xl font-black text-ink mb-6">
         Trial Request Form
       </h2>
 
@@ -173,7 +166,7 @@ export default function ContactForm({ programs }: { programs: Program[] }) {
       </div>
 
       {error && (
-        <p className="mt-4 text-sm text-red-500 font-600" style={{ fontFamily: 'var(--font-display)' }}>
+        <p className="mt-4 text-sm text-red-500 font-semibold">
           {error}
         </p>
       )}
@@ -181,13 +174,12 @@ export default function ContactForm({ programs }: { programs: Program[] }) {
       <button
         type="submit"
         disabled={loading}
-        className="mt-7 w-full py-4 rounded-2xl text-base font-800 text-white transition-opacity"
+        className="mt-7 w-full py-4 rounded-2xl text-base font-extrabold text-white transition-opacity"
         style={{
           background: 'var(--color-pink)',
-          fontFamily: 'var(--font-display)',
           opacity: loading ? 0.7 : 1,
           cursor: loading ? 'not-allowed' : 'pointer',
-          boxShadow: '0 4px 18px rgba(233,30,140,0.25)',
+          boxShadow: '0 4px 18px rgba(232,61,143,0.25)',
         }}
       >
         {loading ? 'Submitting…' : 'Submit Trial Request'}

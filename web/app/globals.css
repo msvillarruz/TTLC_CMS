@@ -1,19 +1,25 @@
 @import "tailwindcss";
 
 @theme {
-  --color-pink: #E91E8C;
-  --color-teal: #009688;
-  --color-orange: #FF6D3B;
-  --color-yellow: #FFD600;
-  --color-green: #5A9E2F;
-  --color-purple: #7C4DFF;
-  --color-ink: #1A1A2E;
-  --color-ink-light: #2d2d4e;
-  --color-surface: #FAFAF8;
-  --color-card: #FFFFFF;
+  --color-pink:      #E83D8F;
+  --color-teal:      #4DC9D3;
+  --color-orange:    #F47B35;
+  --color-yellow:    #F9C215;
+  --color-green:     #5A9E2F;
+  --color-purple:    #7C4DFF;
+  --color-navy:      #1C2B4A;
+  --color-ink:       #1C2B4A;
+  --color-ink-light: #2e3f5e;
+  --color-surface:   #FAFAF8;
+  --color-card:      #FFFFFF;
+  --color-teal-lt:   #E8F9FA;
+  --color-pink-lt:   #FEF0F6;
+  --color-yellow-lt: #FFFBEA;
+  --color-orange-lt: #FFF4EE;
+  --color-purple-lt: #EDE7FF;
 
-  --font-display: "Nunito", sans-serif;
-  --font-body: "Lora", serif;
+  --font-display: var(--font-nunito), sans-serif;
+  --font-body:    var(--font-nunito), sans-serif;
 
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -57,17 +63,21 @@
   animation: ticker 30s linear infinite;
 }
 
+.font-display {
+  font-family: var(--font-nunito), sans-serif;
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  font-family: var(--font-body);
-  color: var(--color-ink);
-  background-color: var(--color-surface);
+  font-family: var(--font-nunito), sans-serif;
+  color: #1C2B4A;
+  background-color: #FAFAF8;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
+  font-family: var(--font-nunito), sans-serif;
   font-weight: 800;
 }

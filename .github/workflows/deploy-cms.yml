@@ -1,0 +1,44 @@
+name: Deploy CMS to Coolify
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'cms/**'
+      - '.github/workflows/deploy-cms.yml'
+
+jobs:
+  test:
+    name: Type Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cms
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: cms/package-lock.json
+      - run: npm ci
+      - run: npx tsc --noEmit
+
+  deploy:
+    name: Deploy via Coolify Webhook
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Coolify redeploy
+        run: |
+          curl -X GET "${{ secrets.COOLIFY_WEBHOOK_URL }}" \
+            -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}"
+      - name: Health check
+        run: |
+          sleep 90
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://cms.tinythinkers.edu.ph/api/health)
+          if [ "$STATUS" != "200" ]; then
+            echo "Health check failed: $STATUS"
+            exit 1
+          fi
+          echo "Deploy successful"

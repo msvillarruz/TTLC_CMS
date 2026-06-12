@@ -1,0 +1,16 @@
+# Root-level ignores
+.DS_Store
+*.log
+
+# Env files (also covered in cms/ and web/ subdirs)
+.env
+.env.local
+.env.production
+
+# Dependency directories
+node_modules/
+
+# Build outputs
+.next/
+dist/
+build/

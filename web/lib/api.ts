@@ -143,7 +143,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
 }
 
 export async function getHomePage(): Promise<HomePage> {
-  return fetchCMS<HomePage>('/globals/home-page')
+  return fetchCMS<HomePage>('/globals/home-page', 60)
 }
 
 export async function getAnnouncements(): Promise<Announcement[]> {

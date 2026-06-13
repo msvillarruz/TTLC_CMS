@@ -49,7 +49,7 @@ export default function HeroCarousel({ cmsImages = [] }: HeroCarouselProps) {
   return (
     <div
       className="relative rounded-3xl overflow-hidden"
-      style={{ background: '#f8f8f8' }}
+      style={{ background: '#ffffff' }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >

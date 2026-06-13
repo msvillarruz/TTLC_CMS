@@ -154,6 +154,14 @@ export const HomePage: GlobalConfig = {
               ],
             },
             { name: 'heroImage', type: 'upload', relationTo: 'media', label: 'Hero Background Image (optional)' },
+            {
+              name: 'heroImages',
+              type: 'array',
+              label: 'Hero Carousel Images',
+              fields: [
+                { name: 'image', type: 'upload', relationTo: 'media', required: true },
+              ],
+            },
           ],
         },
         {

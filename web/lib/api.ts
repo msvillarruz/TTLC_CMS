@@ -44,6 +44,7 @@ export type HomePage = {
   heroHeadline?: string
   heroSubline?: string
   heroImage?: { url: string; alt?: string }
+  heroImages?: { image: { url: string; alt?: string } }[]
 }
 
 export type Announcement = {
@@ -143,7 +144,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
 }
 
 export async function getHomePage(): Promise<HomePage> {
-  return fetchCMS<HomePage>('/globals/home-page', 60)
+  return fetchCMS<HomePage>('/globals/home-page?depth=1', 60)
 }
 
 export async function getAnnouncements(): Promise<Announcement[]> {

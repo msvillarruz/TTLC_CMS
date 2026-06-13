@@ -107,11 +107,17 @@ export default async function HomePage() {
 
             {/* Right: Hero Carousel */}
             <HeroCarousel
-              cmsImages={
-                homePage.heroImage?.url
+              cmsImages={[
+                ...(homePage.heroImage?.url
                   ? [{ src: homePage.heroImage.url, alt: homePage.heroImage.alt || 'Tiny Thinkers Learning Center' }]
-                  : []
-              }
+                  : []),
+                ...(homePage.heroImages
+                  ?.filter((item) => Boolean(item.image?.url))
+                  .map((item) => ({
+                    src: item.image.url,
+                    alt: item.image.alt || 'Tiny Thinkers Learning Center',
+                  })) ?? []),
+              ]}
             />
           </div>
         </div>

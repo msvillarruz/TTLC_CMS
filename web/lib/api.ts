@@ -43,6 +43,7 @@ export type SiteSettings = {
 export type HomePage = {
   heroHeadline?: string
   heroSubline?: string
+  heroImage?: { url: string; alt?: string }
 }
 
 export type Announcement = {

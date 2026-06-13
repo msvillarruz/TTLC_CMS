@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getPrograms, getAuthors, getSiteSettings, getHomePage, getTestimonials } from '@/lib/api'
 import ProgramCard from '@/components/ProgramCard'
+import HeroCarousel from '@/components/HeroCarousel'
 import { OBJECTIVES, PROGRAM_COLORS } from '@/lib/content'
 
 export const revalidate = 3600
@@ -104,23 +105,14 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Right: Visual placeholder */}
-            <div
-              className="rounded-3xl flex flex-col items-center justify-center py-16 px-8 text-center"
-              style={{
-                background: '#FEF0F6',
-                border: '2px dashed #E83D8F',
-                minHeight: '280px',
-              }}
-            >
-              <span style={{ fontSize: '80px', lineHeight: 1 }}>🎒</span>
-              <p
-                className="mt-5 text-base font-semibold"
-                style={{ color: '#E83D8F' }}
-              >
-                School photos coming soon!
-              </p>
-            </div>
+            {/* Right: Hero Carousel */}
+            <HeroCarousel
+              cmsImages={
+                homePage.heroImage?.url
+                  ? [{ src: homePage.heroImage.url, alt: homePage.heroImage.alt || 'Tiny Thinkers Learning Center' }]
+                  : []
+              }
+            />
           </div>
         </div>
       </section>

@@ -49,21 +49,29 @@ export default function HeroCarousel({ cmsImages = [] }: HeroCarouselProps) {
   return (
     <div
       className="relative rounded-3xl overflow-hidden"
-      style={{ minHeight: '320px' }}
+      style={{ background: '#f8f8f8' }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
       {images.map((img, i) => (
         <div
           key={img.src}
-          className="absolute inset-0 transition-opacity duration-700"
-          style={{ opacity: i === current ? 1 : 0, pointerEvents: i === current ? 'auto' : 'none' }}
+          className="transition-opacity duration-700"
+          style={{
+            position: i === current ? 'relative' : 'absolute',
+            inset: i === current ? 'auto' : 0,
+            width: '100%',
+            opacity: i === current ? 1 : 0,
+            pointerEvents: i === current ? 'auto' : 'none',
+          }}
         >
           <Image
             src={img.src}
             alt={img.alt || `School photo ${i + 1}`}
-            fill
-            className="object-cover"
+            width={0}
+            height={0}
+            sizes="(max-width: 768px) 100vw, 50vw"
+            style={{ width: '100%', height: 'auto', display: 'block' }}
             priority={i === 0}
           />
         </div>

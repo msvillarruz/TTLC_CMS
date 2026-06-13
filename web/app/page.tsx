@@ -79,7 +79,7 @@ export default async function HomePage() {
                 className="inline-block px-4 py-1.5 rounded-full text-sm font-extrabold text-white mb-6"
                 style={{ background: '#4DC9D3' }}
               >
-                🌱 Enrolling Now
+                🌱 Enrollment On-going
               </span>
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-ink mb-6 leading-tight">
                 {headline}

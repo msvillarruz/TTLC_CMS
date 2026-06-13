@@ -51,6 +51,15 @@ export default async function ContactPage() {
                     <span>{settings.address}</span>
                   </p>
                 )}
+                <a
+                  href="https://maps.app.goo.gl/biZYdEPbPY3UBAxA7"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-bold transition-colors hover:opacity-70"
+                  style={{ color: '#4DC9D3' }}
+                >
+                  View on Google Maps →
+                </a>
                 {settings.phone && (
                   <p className="flex gap-2">
                     <span>📞</span>

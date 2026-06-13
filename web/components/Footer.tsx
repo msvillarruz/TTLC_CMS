@@ -123,6 +123,17 @@ export default function Footer({ programs, logoUrl, footerLogoUrl }: { programs:
               ))}
               <li>
                 <a
+                  href="https://maps.app.goo.gl/biZYdEPbPY3UBAxA7"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-2 text-sm text-white/60 hover:text-pink transition-colors"
+                >
+                  <span>📍</span>
+                  <span>113 West Avenue Brgy. Bungad, Quezon City</span>
+                </a>
+              </li>
+              <li>
+                <a
                   href="mailto:hello@tinythinkers.edu.ph"
                   className="text-sm text-white/60 hover:text-pink transition-colors"
                 >

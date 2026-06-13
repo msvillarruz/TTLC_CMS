@@ -51,6 +51,14 @@ export default function Nav({ logoUrl }: { logoUrl?: string }) {
               {l.label}
             </Link>
           ))}
+          <a
+            href="https://maps.app.goo.gl/biZYdEPbPY3UBAxA7"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-bold text-ink hover:text-pink transition-colors"
+          >
+            📍 Find Us
+          </a>
           <Link
             href="/contact"
             className="px-5 py-2 rounded-xl text-sm font-extrabold text-white bg-pink hover:bg-pink/90 transition-colors"
@@ -91,6 +99,15 @@ export default function Nav({ logoUrl }: { logoUrl?: string }) {
             {l.label}
           </Link>
         ))}
+        <a
+          href="https://maps.app.goo.gl/biZYdEPbPY3UBAxA7"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => setOpen(false)}
+          className="block py-3 text-sm font-bold text-ink border-b border-gray-50 hover:text-pink transition-colors"
+        >
+          📍 Find Us
+        </a>
         <Link
           href="/contact"
           onClick={() => setOpen(false)}

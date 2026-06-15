@@ -32,7 +32,7 @@ export default function Footer({ programs, logoUrl, footerLogoUrl }: { programs:
               <img
                 src={displayLogoUrl}
                 alt="Tiny Thinkers Learning Center"
-                style={{ height: '120px', width: 'auto', objectFit: 'contain', marginBottom: '12px', filter: 'brightness(0) invert(1)' }}
+                style={{ height: '120px', width: 'auto', objectFit: 'contain', marginBottom: '12px' }}
               />
             ) : (
               <>

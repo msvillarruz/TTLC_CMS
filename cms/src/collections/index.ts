@@ -23,6 +23,14 @@ export const Events: CollectionConfig = {
     { name: 'location', type: 'text', admin: { placeholder: 'e.g. Tiny Thinkers Main Campus, QC' } },
     { name: 'heroImage', type: 'upload', relationTo: 'media' },
     { name: 'description', type: 'richText', required: true },
+    {
+      name: 'highlightImages',
+      type: 'array',
+      label: 'Event Highlight Photos',
+      fields: [
+        { name: 'image', type: 'upload', relationTo: 'media', required: true },
+      ],
+    },
     { name: 'registrationLink', type: 'text', label: 'Registration Link (optional)' },
     {
       name: 'status',

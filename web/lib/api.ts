@@ -85,6 +85,7 @@ export type Event = {
   location?: string
   description?: unknown
   heroImage?: { url: string; alt?: string }
+  highlightImages?: { image: { url: string; alt?: string } }[]
   status: 'upcoming' | 'past' | 'cancelled'
   registrationLink?: string
 }
@@ -176,7 +177,7 @@ export async function getEvents(): Promise<Event[]> {
 }
 
 export async function getEvent(slug: string): Promise<Event | null> {
-  const data = await fetchCMS<{ docs: Event[] }>(`/events?where[slug][equals]=${slug}&depth=1&limit=1`)
+  const data = await fetchCMS<{ docs: Event[] }>(`/events?where[slug][equals]=${slug}&depth=1&limit=1`, 60)
   return data.docs[0] ?? null
 }
 

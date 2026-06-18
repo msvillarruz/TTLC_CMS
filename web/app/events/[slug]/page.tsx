@@ -4,8 +4,11 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getEvent, getEvents } from '@/lib/api'
 import { serializeLexical } from '@/lib/lexical'
+import EventCarousel from '@/components/EventCarousel'
 
-export const revalidate = 3600
+export const revalidate = 60
+
+const SITE_URL = 'https://tinythinkers.edu.ph'
 
 export async function generateStaticParams() {
   const events = await getEvents().catch(() => [])
@@ -16,9 +19,33 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   const ev = await getEvent(slug).catch(() => null)
   if (!ev) return { title: 'Event — Tiny Thinkers Learning Center' }
+
+  const ogImage =
+    ev.highlightImages?.[0]?.image?.url ??
+    ev.heroImage?.url ??
+    undefined
+
+  const descriptionText = typeof ev.description === 'string'
+    ? ev.description.slice(0, 160)
+    : `Join us for ${ev.title} at Tiny Thinkers Learning Center.`
+
   return {
     title: `${ev.title} — Tiny Thinkers Learning Center`,
-    openGraph: ev.heroImage?.url ? { images: [ev.heroImage.url] } : undefined,
+    description: descriptionText,
+    openGraph: {
+      title: ev.title,
+      description: descriptionText,
+      type: 'article',
+      url: `${SITE_URL}/events/${slug}`,
+      siteName: 'Tiny Thinkers Learning Center',
+      images: ogImage ? [{ url: ogImage, width: 1200, height: 630, alt: ev.title }] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: ev.title,
+      description: descriptionText,
+      images: ogImage ? [ogImage] : undefined,
+    },
   }
 }
 
@@ -35,6 +62,10 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
 
   const descHtml = serializeLexical(ev.description)
   const s = STATUS_STYLE[ev.status] ?? STATUS_STYLE.upcoming
+
+  const carouselImages = (ev.highlightImages ?? [])
+    .map((item) => item.image)
+    .filter((img): img is { url: string; alt?: string } => Boolean(img?.url))
 
   return (
     <div className="min-h-screen bg-white">
@@ -122,12 +153,25 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
         {/* Description */}
         {descHtml ? (
           <div
-            className="prose prose-ink max-w-none"
+            className="prose prose-ink max-w-none mb-10"
             style={{ fontFamily: 'var(--font-body)', lineHeight: 1.8, color: 'rgba(26,26,46,0.85)' }}
             dangerouslySetInnerHTML={{ __html: descHtml }}
           />
         ) : (
-          <p className="text-ink/40 italic">No description available.</p>
+          <p className="text-ink/40 italic mb-10">No description available.</p>
+        )}
+
+        {/* Highlight photo carousel */}
+        {carouselImages.length > 0 && (
+          <div className="mb-10">
+            <h2
+              className="text-lg font-800 text-ink mb-4"
+              style={{ fontFamily: 'var(--font-display)' }}
+            >
+              Event Highlights
+            </h2>
+            <EventCarousel images={carouselImages} />
+          </div>
         )}
       </div>
     </div>

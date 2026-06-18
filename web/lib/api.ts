@@ -156,14 +156,16 @@ export async function getAnnouncements(): Promise<Announcement[]> {
 
 export async function getArticles(): Promise<Article[]> {
   const data = await fetchCMS<{ docs: Article[] }>(
-    '/articles?where[status][equals]=published&depth=1&limit=20&sort=-publishedAt'
+    '/articles?where[status][equals]=published&depth=1&limit=20&sort=-publishedAt',
+    60
   )
   return data.docs
 }
 
 export async function getArticle(slug: string): Promise<Article | null> {
   const data = await fetchCMS<{ docs: Article[] }>(
-    `/articles?where[slug][equals]=${slug}&where[status][equals]=published&depth=1&limit=1`
+    `/articles?where[slug][equals]=${slug}&where[status][equals]=published&depth=1&limit=1`,
+    60
   )
   return data.docs[0] ?? null
 }

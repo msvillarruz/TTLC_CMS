@@ -157,6 +157,18 @@ export const Authors: CollectionConfig = {
   fields: [
     { name: 'name', type: 'text', required: true },
     { name: 'role', type: 'text', admin: { placeholder: 'e.g. Lead Teacher, Co-Founder' } },
+    {
+      name: 'group',
+      type: 'select',
+      label: 'Team Group',
+      required: false,
+      defaultValue: 'faculty',
+      options: [
+        { label: 'Admin', value: 'admin' },
+        { label: 'Faculty', value: 'faculty' },
+        { label: 'Operations', value: 'operations' },
+      ],
+    },
     { name: 'photo', type: 'upload', relationTo: 'media' },
     { name: 'bio', type: 'textarea', admin: { description: 'Short bio (2–3 sentences)' } },
   ],

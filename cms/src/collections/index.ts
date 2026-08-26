@@ -156,6 +156,15 @@ export const Authors: CollectionConfig = {
   },
   fields: [
     { name: 'name', type: 'text', required: true },
+    {
+      name: 'nickname',
+      type: 'text',
+      label: 'Display Name (for team card)',
+      required: false,
+      admin: {
+        description: "Short name shown on the vertical strip of the team card. e.g. 'Ate Joy', 'Teacher Cheska', 'Ma'am Carla'",
+      },
+    },
     { name: 'role', type: 'text', admin: { placeholder: 'e.g. Lead Teacher, Co-Founder' } },
     {
       name: 'group',

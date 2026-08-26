@@ -76,15 +76,13 @@ export default async function AboutPage() {
           {authors.length === 0 ? (
             <p className="text-center text-ink/40 py-10">No team members found.</p>
           ) : (() => {
-            const leadership = authors.filter((a) =>
-              ['School Head', 'Academic Lead', 'Head of EdTech', 'Corporate Secretary'].includes(a.role ?? '')
-            )
-            const faculty = authors.filter((a) => a.role?.includes('Head Teacher'))
-            const support = authors.filter((a) => a.role?.includes('Teacher Aide'))
+            const leadership = authors.filter((a) => a.group === 'admin')
+            const faculty = authors.filter((a) => a.group === 'faculty')
+            const support = authors.filter((a) => a.group === 'operations')
 
             const groups = [
-              { label: 'Admin & Leadership', members: leadership, color: '#E83D8F' },
-              { label: 'Faculty & Academic Team', members: faculty, color: '#4DC9D3' },
+              { label: 'Leadership', members: leadership, color: '#E83D8F' },
+              { label: 'Faculty', members: faculty, color: '#4DC9D3' },
               { label: 'Operations & Support', members: support, color: '#7C4DFF' },
             ]
 
@@ -105,7 +103,7 @@ export default async function AboutPage() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
                       {group.members.map((a) => {
-                        const firstName = a.name.split(' ')[0]
+                        const cardName = a.nickname || a.name.split(' ')[0]
                         return (
                           <div
                             key={a.id}
@@ -140,7 +138,7 @@ export default async function AboutPage() {
                                     whiteSpace: 'nowrap',
                                   }}
                                 >
-                                  {firstName}
+                                  {cardName}
                                 </span>
                               </div>
 

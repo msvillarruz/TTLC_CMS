@@ -26,7 +26,9 @@ export type Program = {
 export type Author = {
   id: number
   name: string
+  nickname?: string
   role: string
+  group?: 'admin' | 'faculty' | 'operations'
   photo?: { url: string; alt?: string }
 }
 

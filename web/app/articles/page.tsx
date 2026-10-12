@@ -1,13 +1,14 @@
-import type { Metadata } from 'next'
+import JsonLd from '@/components/JsonLd'
+import { pageMetadata, webPageStructuredData } from '@/lib/seo'
+import { STATIC_CONTENT_UPDATED_AT } from '@/lib/seo-utils'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getArticles } from '@/lib/api'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Articles — Tiny Thinkers Learning Center',
-  description: 'Tips, stories, and insights on early childhood education from the Tiny Thinkers team.',
+export async function generateMetadata() {
+  return pageMetadata({ path: '/articles', title: "Early Learning Articles and School News | Tiny Thinkers", description: "Read early learning articles, school news and updates from Tiny Thinkers Learning Center in Quezon City." })
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -26,6 +27,7 @@ export default async function ArticlesPage() {
 
   return (
     <div className="min-h-screen">
+      <JsonLd data={webPageStructuredData('/articles', "Early Learning Articles and School News | Tiny Thinkers", STATIC_CONTENT_UPDATED_AT)} />
       <section
         className="py-16 px-4 text-center"
         style={{ background: 'linear-gradient(135deg, #F0FFF8 0%, #FFF5FB 100%)' }}

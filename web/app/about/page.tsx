@@ -1,13 +1,14 @@
-import type { Metadata } from 'next'
+import JsonLd from '@/components/JsonLd'
+import { pageMetadata, webPageStructuredData } from '@/lib/seo'
+import { STATIC_CONTENT_UPDATED_AT } from '@/lib/seo-utils'
 import Image from 'next/image'
 import { getAuthors, getSiteSettings } from '@/lib/api'
 import { OBJECTIVES } from '@/lib/content'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'About Us — Tiny Thinkers Learning Center',
-  description: 'Meet the team behind Tiny Thinkers Learning Center.',
+export async function generateMetadata() {
+  return pageMetadata({ path: '/about', title: "About Tiny Thinkers | Play-Based Learning in Quezon City", description: "Meet the Tiny Thinkers team and learn about our play-based approach to early childhood learning in Quezon City." })
 }
 
 export default async function AboutPage() {
@@ -18,6 +19,7 @@ export default async function AboutPage() {
 
   return (
     <div className="min-h-screen">
+      <JsonLd data={webPageStructuredData('/about', "About Tiny Thinkers | Play-Based Learning in Quezon City", STATIC_CONTENT_UPDATED_AT)} />
       {/* Header */}
       <section
         className="py-16 px-4 text-center"

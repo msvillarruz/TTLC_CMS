@@ -5,6 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "typecheck": "tsc --noEmit",
+    "test:seo": "node --experimental-strip-types --test tests/seo.test.ts",
+    "verify:seo": "node --experimental-strip-types tests/verify-seo.ts",
     "start": "next start"
   },
   "dependencies": {

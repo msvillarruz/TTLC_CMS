@@ -4,6 +4,9 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getArticle, getArticles } from '@/lib/api'
 import { serializeLexical } from '@/lib/lexical'
+import JsonLd from '@/components/JsonLd'
+import { pageMetadata } from '@/lib/seo'
+import { contentDate, latestContentDate, pageUrl, recordPath, SCHOOL_ID, STATIC_CONTENT_UPDATED_AT } from '@/lib/seo-utils'
 
 export const revalidate = 3600
 
@@ -16,11 +19,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   const article = await getArticle(slug).catch(() => null)
   if (!article) return { title: 'Article — Tiny Thinkers Learning Center' }
-  return {
-    title: `${article.title} — Tiny Thinkers Learning Center`,
-    description: article.excerpt,
-    openGraph: article.heroImage?.url ? { images: [article.heroImage.url] } : undefined,
-  }
+  return pageMetadata({
+    path: recordPath('articles', slug),
+    title: `${article.seo?.title || article.title} | Tiny Thinkers`,
+    description: article.seo?.description || article.excerpt || `${article.title} from Tiny Thinkers Learning Center in Quezon City.`,
+    image: article.seo?.ogImage || article.heroImage,
+    article: { publishedAt: article.publishedAt, updatedAt: latestContentDate(STATIC_CONTENT_UPDATED_AT, article.updatedAt), author: article.author?.name },
+  })
 }
 
 export default async function ArticleDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -29,9 +34,20 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
   if (!article) notFound()
 
   const bodyHtml = serializeLexical(article.body)
+  const url = pageUrl(recordPath('articles', slug))
+  const datePublished = contentDate(article.publishedAt)
+  const dateModified = latestContentDate(STATIC_CONTENT_UPDATED_AT, article.updatedAt)
 
   return (
     <div className="min-h-screen bg-white">
+      <JsonLd data={{
+        '@context': 'https://schema.org', '@type': 'Article', '@id': `${url}#article`,
+        url, headline: article.title, description: article.excerpt,
+        mainEntityOfPage: url, publisher: { '@id': SCHOOL_ID },
+        ...(article.heroImage?.url && { image: article.heroImage.url }),
+        ...(article.author?.name && { author: { '@type': 'Person', name: article.author.name } }),
+        ...(datePublished && { datePublished }), ...(dateModified && { dateModified }),
+      }} />
       {/* Hero */}
       {article.heroImage?.url && (
         <div className="relative w-full" style={{ aspectRatio: '21/9', background: '#f3f4f6', maxHeight: '480px', overflow: 'hidden' }}>

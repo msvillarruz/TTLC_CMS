@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import type { Program } from '@/lib/api'
+import type { Program, SiteSettings } from '@/lib/api'
 
 const schoolLinks = [
   { label: 'About Us', href: '/about' },
@@ -19,7 +19,7 @@ const socialLinks = [
   },
 ]
 
-export default function Footer({ programs, logoUrl, footerLogoUrl }: { programs: Program[]; logoUrl?: string; footerLogoUrl?: string }) {
+export default function Footer({ programs, logoUrl, footerLogoUrl, settings }: { programs: Program[]; logoUrl?: string; footerLogoUrl?: string; settings: SiteSettings }) {
   const displayLogoUrl = footerLogoUrl || logoUrl
   return (
     <footer className="bg-ink text-white pt-12 pb-6">
@@ -111,7 +111,7 @@ export default function Footer({ programs, logoUrl, footerLogoUrl }: { programs:
               {socialLinks.map((s) => (
                 <li key={s.label}>
                   <a
-                    href={s.href}
+                    href={settings.facebookUrl || s.href}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-sm text-white/60 hover:text-pink transition-colors"
@@ -123,21 +123,21 @@ export default function Footer({ programs, logoUrl, footerLogoUrl }: { programs:
               ))}
               <li>
                 <a
-                  href="https://maps.app.goo.gl/biZYdEPbPY3UBAxA7"
+                  href={settings.googleMapsUrl || 'https://maps.app.goo.gl/biZYdEPbPY3UBAxA7'}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-2 text-sm text-white/60 hover:text-pink transition-colors"
                 >
                   <span>📍</span>
-                  <span>113 West Avenue Brgy. Bungad, Quezon City</span>
+                  <span>{settings.address || '113 West Avenue Brgy. Bungad, Quezon City'}</span>
                 </a>
               </li>
               <li>
                 <a
-                  href="mailto:hello@tinythinkers.edu.ph"
+                  href={`mailto:${settings.email || 'hello@tinythinkers.edu.ph'}`}
                   className="text-sm text-white/60 hover:text-pink transition-colors"
                 >
-                  hello@tinythinkers.edu.ph
+                  {settings.email || 'hello@tinythinkers.edu.ph'}
                 </a>
               </li>
             </ul>

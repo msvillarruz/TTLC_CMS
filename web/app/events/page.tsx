@@ -1,13 +1,14 @@
-import type { Metadata } from 'next'
+import JsonLd from '@/components/JsonLd'
+import { pageMetadata, webPageStructuredData } from '@/lib/seo'
+import { STATIC_CONTENT_UPDATED_AT } from '@/lib/seo-utils'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getEvents } from '@/lib/api'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Events — Tiny Thinkers Learning Center',
-  description: 'Upcoming and past events at Tiny Thinkers Learning Center.',
+export async function generateMetadata() {
+  return pageMetadata({ path: '/events', title: "School Events in Quezon City | Tiny Thinkers", description: "Explore school activities, open houses and community events at Tiny Thinkers Learning Center in Quezon City." })
 }
 
 const STATUS_STYLE: Record<string, { bg: string; color: string; label: string }> = {
@@ -26,6 +27,7 @@ export default async function EventsPage() {
 
   return (
     <div className="min-h-screen">
+      <JsonLd data={webPageStructuredData('/events', "School Events in Quezon City | Tiny Thinkers", STATIC_CONTENT_UPDATED_AT)} />
       <section
         className="py-16 px-4 text-center"
         style={{ background: 'linear-gradient(135deg, #FFF8E7 0%, #F0FFF8 100%)' }}

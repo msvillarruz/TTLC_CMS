@@ -4,8 +4,16 @@ import { getPrograms, getAuthors, getSiteSettings, getHomePage, getTestimonials 
 import ProgramCard from '@/components/ProgramCard'
 import HeroCarousel from '@/components/HeroCarousel'
 import { OBJECTIVES, PROGRAM_COLORS } from '@/lib/content'
+import ParentFAQ from '@/components/ParentFAQ'
+import JsonLd from '@/components/JsonLd'
+import { pageMetadata, webPageStructuredData } from '@/lib/seo'
+import { latestContentDate, STATIC_CONTENT_UPDATED_AT, SITE_DESCRIPTION } from '@/lib/seo-utils'
 
 export const revalidate = 3600
+
+export async function generateMetadata() {
+  return pageMetadata({ path: '/', title: 'Play-Based Learning in Quezon City | Tiny Thinkers', description: SITE_DESCRIPTION })
+}
 
 const journeyStages = [
   {
@@ -67,6 +75,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <JsonLd data={webPageStructuredData('/', 'Tiny Thinkers Learning Center', latestContentDate(STATIC_CONTENT_UPDATED_AT, settings.updatedAt, homePage.updatedAt, ...programs.map((p) => p.updatedAt)))} />
       {/* HERO */}
       <section
         className="relative overflow-hidden py-20 px-4 animate-fade-up"
@@ -88,6 +97,7 @@ export default async function HomePage() {
               <p className="text-lg sm:text-xl text-ink/70 max-w-lg mb-10 leading-relaxed">
                 {subline}
               </p>
+              <p className="text-sm font-bold text-teal mb-6">Play-based learning on West Avenue, Quezon City.</p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/contact"
@@ -130,8 +140,8 @@ export default async function HomePage() {
       >
         <div className="max-w-6xl mx-auto flex flex-wrap justify-center gap-8">
           {[
-            { icon: '🏫', label: '8 Programs' },
-            { icon: '👶', label: 'Ages 1.5 to 5+' },
+            { icon: '🏫', label: `${programs.length} Programs` },
+            { icon: '👶', label: 'Age-specific Classes' },
             { icon: '👩‍🏫', label: 'Max 8 Kids per Class' },
             { icon: '📍', label: 'Quezon City, PH' },
             { icon: '🗓️', label: 'Since August 2024' },
@@ -441,6 +451,8 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      <ParentFAQ programs={programs} settings={settings} />
 
       {/* FOOTER CTA */}
       <section

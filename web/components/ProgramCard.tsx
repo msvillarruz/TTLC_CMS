@@ -2,10 +2,12 @@ import Link from 'next/link'
 import type { Program } from '@/lib/api'
 import { resolveColor } from '@/lib/api'
 import { PROGRAM_COLORS } from '@/lib/content'
+import { programAgeRange, programFocuses } from '@/lib/seo-utils'
 
 export default function ProgramCard({ program, showFocuses = false }: { program: Program; showFocuses?: boolean }) {
   const color = PROGRAM_COLORS[program.name] || resolveColor(program.accentColor)
-  const ageRange = `${program.ageMin}–${program.ageMax} yrs`
+  const ageRange = programAgeRange(program)
+  const focuses = programFocuses(program)
 
   return (
     <Link
@@ -39,9 +41,9 @@ export default function ProgramCard({ program, showFocuses = false }: { program:
           <p className="text-xs text-ink/50 mb-3">{program.schedule}</p>
         )}
 
-        {showFocuses && program.focuses?.length > 0 && (
+        {showFocuses && focuses.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-3">
-            {program.focuses.slice(0, 2).map((f, i) => (
+            {focuses.slice(0, 2).map((focus, i) => (
               <span
                 key={i}
                 className="text-xs px-2 py-0.5 rounded-full font-semibold"
@@ -50,7 +52,7 @@ export default function ProgramCard({ program, showFocuses = false }: { program:
                   color,
                 }}
               >
-                {f.focus}
+                {focus}
               </span>
             ))}
           </div>

@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
+import JsonLd from '@/components/JsonLd'
+import { pageMetadata, webPageStructuredData } from '@/lib/seo'
+import { STATIC_CONTENT_UPDATED_AT } from '@/lib/seo-utils'
 import { getPrograms } from '@/lib/api'
 import ProgramCard from '@/components/ProgramCard'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Programs — Tiny Thinkers Learning Center',
-  description: 'Explore our play-based learning programs for children ages 1–9.',
+export async function generateMetadata() {
+  return pageMetadata({ path: '/programs', title: "Toddler, Nursery and Kinder Readiness Programs | Tiny Thinkers", description: "Explore Tiny Thinkers classes in Quezon City. Compare program ages, schedules and learning focuses, then request a free trial." })
 }
 
 export default async function ProgramsPage() {
@@ -14,6 +15,7 @@ export default async function ProgramsPage() {
 
   return (
     <div className="min-h-screen">
+      <JsonLd data={webPageStructuredData('/programs', "Toddler, Nursery and Kinder Readiness Programs | Tiny Thinkers", STATIC_CONTENT_UPDATED_AT)} />
       {/* Header */}
       <section
         className="py-16 px-4 text-center"

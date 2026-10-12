@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import type { Program } from '@/lib/api'
 import { submitTrialRequest } from '@/lib/api'
+import { programAgeRange } from '@/lib/seo-utils'
 
 const inputStyle = {
   width: '100%',
@@ -158,7 +159,7 @@ export default function ContactForm({ programs }: { programs: Program[] }) {
             <option value="">Select a program…</option>
             {programs.map((p) => (
               <option key={p.id} value={p.id}>
-                {p.name} (Ages {p.ageMin}–{p.ageMax})
+                {p.name} ({programAgeRange(p)})
               </option>
             ))}
           </select>

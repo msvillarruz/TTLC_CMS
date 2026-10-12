@@ -5,6 +5,9 @@ import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import AnnouncementTicker from '@/components/AnnouncementTicker'
 import { getPrograms, getSiteSettings } from '@/lib/api'
+import JsonLd from '@/components/JsonLd'
+import { schoolStructuredData } from '@/lib/seo'
+import { SITE_URL } from '@/lib/seo-utils'
 
 const nunito = Nunito({
   subsets: ['latin'],
@@ -14,13 +17,7 @@ const nunito = Nunito({
 })
 
 export const metadata: Metadata = {
-  title: "Tiny Thinkers Learning Center | Your Child's Best Beginning",
-  description: 'A progressive playschool in Quezon City for children ages 1.5 to 5 years. Play-based, holistic, small-class learning since 2024.',
-  openGraph: {
-    title: "Tiny Thinkers Learning Center | Your Child's Best Beginning",
-    description: 'A progressive playschool in Quezon City for children ages 1.5 to 5 years. Play-based, holistic, small-class learning since 2024.',
-    siteName: 'Tiny Thinkers Learning Center',
-  },
+  metadataBase: new URL(SITE_URL),
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -35,10 +32,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={nunito.variable}>
       <body>
+        <JsonLd data={schoolStructuredData(settings)} />
         <AnnouncementTicker />
         <Nav logoUrl={logoUrl} />
         <main>{children}</main>
-        <Footer programs={programs} logoUrl={logoUrl} footerLogoUrl={footerLogoUrl} />
+        <Footer programs={programs} logoUrl={logoUrl} footerLogoUrl={footerLogoUrl} settings={settings} />
       </body>
     </html>
   )

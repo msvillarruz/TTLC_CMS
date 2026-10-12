@@ -12,15 +12,19 @@ export type Program = {
   name: string
   slug: string
   classType: string
-  ageMin: number
-  ageMax: number
+  ageMin: string | number
+  ageMax: string | number
+  ageRange?: string
   duration: string
-  focuses: { focus: string }[]
+  focuses: { item?: string; focus?: string }[]
   accentColor?: string
   classSize?: string
   schedule?: string
   specialNote?: string
-  classRoutine?: { time: string; activity: string }[]
+  classRoutine?: { duration?: string; time?: string; activity: string }[]
+  description?: string
+  heroImage?: { url: string; alt?: string }
+  updatedAt?: string
 }
 
 export type Author = {
@@ -33,6 +37,7 @@ export type Author = {
 }
 
 export type SiteSettings = {
+  schoolName?: string
   mission?: string
   address?: string
   phone?: string
@@ -40,9 +45,19 @@ export type SiteSettings = {
   mapEmbedUrl?: string
   logo?: { url: string; alt?: string }
   footerLogo?: { url: string; alt?: string }
+  ogImage?: { url: string; alt?: string }
+  metaTitle?: string
+  metaDescription?: string
+  facebookUrl?: string
+  instagramUrl?: string
+  tiktokUrl?: string
+  googleMapsUrl?: string
+  googleMapsEmbed?: string
+  updatedAt?: string
 }
 
 export type HomePage = {
+  updatedAt?: string
   heroHeadline?: string
   heroSubline?: string
   heroImage?: { url: string; alt?: string }
@@ -76,6 +91,8 @@ export type Article = {
   heroImage?: { url: string; alt?: string }
   author?: { id: number; name: string; role?: string }
   categories?: Category[]
+  updatedAt?: string
+  seo?: { title?: string; description?: string; ogImage?: { url: string; alt?: string } }
 }
 
 export type Event = {
@@ -90,6 +107,7 @@ export type Event = {
   highlightImages?: { image: { url: string; alt?: string } }[]
   status: 'upcoming' | 'past' | 'cancelled'
   registrationLink?: string
+  updatedAt?: string
 }
 
 export type Testimonial = {
@@ -130,7 +148,7 @@ export async function getPrograms(): Promise<Program[]> {
 }
 
 export async function getProgram(slug: string): Promise<Program | null> {
-  const data = await fetchCMS<{ docs: Program[] }>(`/programs?where[slug][equals]=${slug}&limit=1`)
+  const data = await fetchCMS<{ docs: Program[] }>(`/programs?where[slug][equals]=${encodeURIComponent(slug)}&limit=1`)
   return data.docs[0] ?? null
 }
 
@@ -167,7 +185,7 @@ export async function getArticles(): Promise<Article[]> {
 
 export async function getArticle(slug: string): Promise<Article | null> {
   const data = await fetchCMS<{ docs: Article[] }>(
-    `/articles?where[slug][equals]=${slug}&where[status][equals]=published&depth=1&limit=1`,
+    `/articles?where[slug][equals]=${encodeURIComponent(slug)}&where[status][equals]=published&depth=1&limit=1`,
     60
   )
   return data.docs[0] ?? null
@@ -179,8 +197,35 @@ export async function getEvents(): Promise<Event[]> {
 }
 
 export async function getEvent(slug: string): Promise<Event | null> {
-  const data = await fetchCMS<{ docs: Event[] }>(`/events?where[slug][equals]=${slug}&depth=1&limit=1`, 60)
+  const data = await fetchCMS<{ docs: Event[] }>(`/events?where[slug][equals]=${encodeURIComponent(slug)}&depth=1&limit=1`, 60)
   return data.docs[0] ?? null
+}
+
+type CMSPage<T> = { docs: T[]; hasNextPage?: boolean; nextPage?: number | null }
+
+// Discover every public record, including content beyond the listing page limit.
+// Let failures surface so a CMS outage cannot replace the sitemap with a partial one.
+async function getAllPublicRecords<T>(collection: string, query = ''): Promise<T[]> {
+  const docs: T[] = []
+  let page = 1
+  while (true) {
+    const data = await fetchCMS<CMSPage<T>>(
+      `/${collection}?limit=100&depth=1&page=${page}${query}`, 300
+    )
+    docs.push(...data.docs)
+    if (!data.hasNextPage) return docs
+    if (!data.nextPage || data.nextPage <= page) throw new Error('Invalid CMS pagination')
+    page = data.nextPage
+  }
+}
+
+export async function getSitemapContent() {
+  const [programs, articles, events] = await Promise.all([
+    getAllPublicRecords<Program>('programs'),
+    getAllPublicRecords<Article>('articles', '&where[status][equals]=published'),
+    getAllPublicRecords<Event>('events'),
+  ])
+  return { programs, articles: articles.filter((a) => a.status === 'published'), events }
 }
 
 export async function getTestimonials(): Promise<Testimonial[]> {

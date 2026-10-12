@@ -2,6 +2,9 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getProgram, getPrograms, resolveColor } from '@/lib/api'
+import JsonLd from '@/components/JsonLd'
+import { pageMetadata, webPageStructuredData } from '@/lib/seo'
+import { latestContentDate, programAgeRange, programFocuses, recordPath, STATIC_CONTENT_UPDATED_AT } from '@/lib/seo-utils'
 
 export const revalidate = 3600
 
@@ -14,10 +17,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   const program = await getProgram(slug).catch(() => null)
   if (!program) return { title: 'Program — Tiny Thinkers Learning Center' }
-  return {
-    title: `${program.name} — Tiny Thinkers Learning Center`,
-    description: `${program.name} for ages ${program.ageMin}–${program.ageMax}. ${program.classType} class.`,
-  }
+  return pageMetadata({
+    path: recordPath('programs', slug),
+    title: `${program.classType} in Quezon City | ${program.name}`,
+    description: program.description || `${program.name}: ${program.classType} for ${programAgeRange(program)} at Tiny Thinkers in Quezon City. View the schedule and book a free trial.`,
+    image: program.heroImage,
+  })
 }
 
 export default async function ProgramDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -26,10 +31,12 @@ export default async function ProgramDetailPage({ params }: { params: Promise<{ 
   if (!program) notFound()
 
   const color = resolveColor(program.accentColor)
-  const ageRange = `${program.ageMin}–${program.ageMax} years old`
+  const ageRange = programAgeRange(program)
+  const focuses = programFocuses(program)
 
   return (
     <div className="min-h-screen">
+      <JsonLd data={webPageStructuredData(recordPath('programs', slug), program.name, latestContentDate(STATIC_CONTENT_UPDATED_AT, program.updatedAt))} />
       {/* Hero */}
       <section
         className="py-16 px-4"
@@ -90,6 +97,7 @@ export default async function ProgramDetailPage({ params }: { params: Promise<{ 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Main content */}
           <div className="md:col-span-2 space-y-10">
+            {program.description && <p className="text-ink/70 leading-relaxed">{program.description}</p>}
 
             {/* Class Routine */}
             {program.classRoutine && program.classRoutine.length > 0 && (
@@ -115,7 +123,7 @@ export default async function ProgramDetailPage({ params }: { params: Promise<{ 
                       </div>
                       <div>
                         <p className="text-xs font-700 text-ink/40 mb-0.5" style={{ fontFamily: 'var(--font-display)' }}>
-                          {item.time}
+                          {item.duration || item.time}
                         </p>
                         <p className="text-sm font-600 text-ink">{item.activity}</p>
                       </div>
@@ -142,7 +150,7 @@ export default async function ProgramDetailPage({ params }: { params: Promise<{ 
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Focuses */}
-            {program.focuses && program.focuses.length > 0 && (
+            {focuses.length > 0 && (
               <div
                 className="bg-white rounded-2xl p-6"
                 style={{ boxShadow: '0 2px 12px rgba(26,26,46,0.07)' }}
@@ -154,7 +162,7 @@ export default async function ProgramDetailPage({ params }: { params: Promise<{ 
                   Learning Focuses
                 </h3>
                 <ul className="space-y-2">
-                  {program.focuses.map((f, i) => (
+                  {focuses.map((focus, i) => (
                     <li key={i} className="flex items-center gap-2 text-sm text-ink/70">
                       <span
                         className="w-5 h-5 rounded-md flex-shrink-0 flex items-center justify-center text-white text-xs"
@@ -162,7 +170,7 @@ export default async function ProgramDetailPage({ params }: { params: Promise<{ 
                       >
                         ✓
                       </span>
-                      {f.focus}
+                      {focus}
                     </li>
                   ))}
                 </ul>

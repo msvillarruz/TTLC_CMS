@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
+import JsonLd from '@/components/JsonLd'
+import { pageMetadata, webPageStructuredData } from '@/lib/seo'
+import { STATIC_CONTENT_UPDATED_AT } from '@/lib/seo-utils'
 import { getAnnouncements } from '@/lib/api'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Announcements — Tiny Thinkers Learning Center',
-  description: 'Latest announcements from Tiny Thinkers Learning Center.',
+export async function generateMetadata() {
+  return pageMetadata({ path: '/announcements', title: "School Announcements | Tiny Thinkers Quezon City", description: "Read current announcements and important school updates from Tiny Thinkers Learning Center in Quezon City." })
 }
 
 export default async function AnnouncementsPage() {
@@ -13,6 +14,7 @@ export default async function AnnouncementsPage() {
 
   return (
     <div className="min-h-screen">
+      <JsonLd data={webPageStructuredData('/announcements', "School Announcements | Tiny Thinkers Quezon City", STATIC_CONTENT_UPDATED_AT)} />
       <section
         className="py-16 px-4 text-center"
         style={{ background: 'linear-gradient(135deg, #FFF5FB 0%, #F0FFF8 100%)' }}

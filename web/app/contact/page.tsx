@@ -1,12 +1,13 @@
-import type { Metadata } from 'next'
+import JsonLd from '@/components/JsonLd'
+import { pageMetadata, webPageStructuredData } from '@/lib/seo'
+import { STATIC_CONTENT_UPDATED_AT } from '@/lib/seo-utils'
 import { getPrograms, getSiteSettings } from '@/lib/api'
 import ContactForm from './ContactForm'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Book a Trial — Tiny Thinkers Learning Center',
-  description: 'Book a free trial class for your child at Tiny Thinkers Learning Center.',
+export async function generateMetadata() {
+  return pageMetadata({ path: '/contact', title: "Book a Free Trial Class in Quezon City | Tiny Thinkers", description: "Request a free trial class at Tiny Thinkers on West Avenue, Quezon City. Find our address, phone and program options." })
 }
 
 export default async function ContactPage() {
@@ -17,6 +18,7 @@ export default async function ContactPage() {
 
   return (
     <div className="min-h-screen">
+      <JsonLd data={webPageStructuredData('/contact', "Book a Free Trial Class in Quezon City | Tiny Thinkers", STATIC_CONTENT_UPDATED_AT)} />
       {/* Header */}
       <section
         className="py-16 px-4 text-center"
@@ -52,7 +54,7 @@ export default async function ContactPage() {
                   </p>
                 )}
                 <a
-                  href="https://maps.app.goo.gl/biZYdEPbPY3UBAxA7"
+                  href={settings.googleMapsUrl || 'https://maps.app.goo.gl/biZYdEPbPY3UBAxA7'}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm font-bold transition-colors hover:opacity-70"
@@ -87,10 +89,10 @@ export default async function ContactPage() {
               </div>
             </div>
 
-            {settings.mapEmbedUrl && (
+            {(settings.googleMapsEmbed || settings.mapEmbedUrl) && (
               <div className="rounded-2xl overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(28,43,74,0.06)' }}>
                 <iframe
-                  src={settings.mapEmbedUrl}
+                  src={(settings.googleMapsEmbed || settings.mapEmbedUrl)}
                   width="100%"
                   height="200"
                   style={{ border: 0 }}

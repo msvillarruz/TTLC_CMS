@@ -5,10 +5,11 @@ import { notFound } from 'next/navigation'
 import { getEvent, getEvents } from '@/lib/api'
 import { serializeLexical } from '@/lib/lexical'
 import EventCarousel from '@/components/EventCarousel'
+import JsonLd from '@/components/JsonLd'
+import { pageMetadata, webPageStructuredData } from '@/lib/seo'
+import { latestContentDate, recordPath, STATIC_CONTENT_UPDATED_AT } from '@/lib/seo-utils'
 
 export const revalidate = 60
-
-const SITE_URL = 'https://tinythinkers.edu.ph'
 
 export async function generateStaticParams() {
   const events = await getEvents().catch(() => [])
@@ -29,24 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     ? ev.description.slice(0, 160)
     : `Join us for ${ev.title} at Tiny Thinkers Learning Center.`
 
-  return {
-    title: `${ev.title} — Tiny Thinkers Learning Center`,
-    description: descriptionText,
-    openGraph: {
-      title: ev.title,
-      description: descriptionText,
-      type: 'article',
-      url: `${SITE_URL}/events/${slug}`,
-      siteName: 'Tiny Thinkers Learning Center',
-      images: ogImage ? [{ url: ogImage, width: 1200, height: 630, alt: ev.title }] : undefined,
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: ev.title,
-      description: descriptionText,
-      images: ogImage ? [ogImage] : undefined,
-    },
-  }
+  return pageMetadata({ path: recordPath('events', slug), title: `${ev.title} | Tiny Thinkers`, description: descriptionText, image: ogImage ? { url: ogImage, alt: ev.title } : undefined })
 }
 
 const STATUS_STYLE: Record<string, { bg: string; color: string; label: string }> = {
@@ -69,6 +53,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
 
   return (
     <div className="min-h-screen bg-white">
+      <JsonLd data={webPageStructuredData(recordPath('events', slug), ev.title, latestContentDate(STATIC_CONTENT_UPDATED_AT, ev.updatedAt))} />
       {/* Hero */}
       {ev.heroImage?.url && (
         <div className="relative w-full" style={{ aspectRatio: '21/9', maxHeight: '420px', overflow: 'hidden', background: '#f3f4f6' }}>

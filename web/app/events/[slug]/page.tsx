@@ -6,7 +6,7 @@ import { getEvent, getEvents } from '@/lib/api'
 import { serializeLexical } from '@/lib/lexical'
 import EventCarousel from '@/components/EventCarousel'
 import JsonLd from '@/components/JsonLd'
-import { pageMetadata, webPageStructuredData } from '@/lib/seo'
+import { breadcrumbStructuredData, pageMetadata, webPageStructuredData } from '@/lib/seo'
 import { latestContentDate, recordPath, STATIC_CONTENT_UPDATED_AT } from '@/lib/seo-utils'
 
 export const revalidate = 60
@@ -54,6 +54,11 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
   return (
     <div className="min-h-screen bg-white">
       <JsonLd data={webPageStructuredData(recordPath('events', slug), ev.title, latestContentDate(STATIC_CONTENT_UPDATED_AT, ev.updatedAt))} />
+      <JsonLd data={breadcrumbStructuredData([
+        { name: 'Home', path: '/' },
+        { name: 'Events', path: '/events' },
+        { name: ev.title, path: recordPath('events', slug) },
+      ])} />
       {/* Hero */}
       {ev.heroImage?.url && (
         <div className="relative w-full" style={{ aspectRatio: '21/9', maxHeight: '420px', overflow: 'hidden', background: '#f3f4f6' }}>
@@ -61,6 +66,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
             src={ev.heroImage.url}
             alt={ev.heroImage.alt || ev.title}
             fill
+            sizes="(max-width: 768px) 100vw, 768px"
             className="object-cover"
             priority
           />

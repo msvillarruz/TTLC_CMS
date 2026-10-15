@@ -1,5 +1,5 @@
 import JsonLd from '@/components/JsonLd'
-import { pageMetadata, webPageStructuredData } from '@/lib/seo'
+import { breadcrumbStructuredData, pageMetadata, programListStructuredData, webPageStructuredData } from '@/lib/seo'
 import { STATIC_CONTENT_UPDATED_AT } from '@/lib/seo-utils'
 import { getPrograms } from '@/lib/api'
 import ProgramCard from '@/components/ProgramCard'
@@ -16,6 +16,8 @@ export default async function ProgramsPage() {
   return (
     <div className="min-h-screen">
       <JsonLd data={webPageStructuredData('/programs', "Toddler, Nursery and Kinder Readiness Programs | Tiny Thinkers", STATIC_CONTENT_UPDATED_AT)} />
+      <JsonLd data={breadcrumbStructuredData([{ name: 'Home', path: '/' }, { name: 'Programs', path: '/programs' }])} />
+      {programs.length > 0 && <JsonLd data={programListStructuredData(programs)} />}
       {/* Header */}
       <section
         className="py-16 px-4 text-center"

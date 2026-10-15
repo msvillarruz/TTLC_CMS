@@ -1,5 +1,5 @@
 import JsonLd from '@/components/JsonLd'
-import { pageMetadata, webPageStructuredData } from '@/lib/seo'
+import { breadcrumbStructuredData, pageMetadata, webPageStructuredData } from '@/lib/seo'
 import { STATIC_CONTENT_UPDATED_AT } from '@/lib/seo-utils'
 import { getAnnouncements } from '@/lib/api'
 
@@ -15,6 +15,7 @@ export default async function AnnouncementsPage() {
   return (
     <div className="min-h-screen">
       <JsonLd data={webPageStructuredData('/announcements', "School Announcements | Tiny Thinkers Quezon City", STATIC_CONTENT_UPDATED_AT)} />
+      <JsonLd data={breadcrumbStructuredData([{ name: 'Home', path: '/' }, { name: 'Announcements', path: '/announcements' }])} />
       <section
         className="py-16 px-4 text-center"
         style={{ background: 'linear-gradient(135deg, #FFF5FB 0%, #F0FFF8 100%)' }}

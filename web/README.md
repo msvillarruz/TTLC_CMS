@@ -23,8 +23,9 @@ npm run verify:seo
 - The sitemap paginates public programs, published articles, and public events. Programs marked no longer enrolling remain public under the current CMS access model; they are not drafts. CMS failures fail the sitemap instead of emitting a partial successful response.
 - `STATIC_CONTENT_UPDATED_AT` tracks this release's significant static content/schema update. Change it only for a real reviewed update. Never replace it with a request-time or build-time clock.
 - CMS `ageRange` is the preferred display text. Decimal age labels are not converted automatically because their intended meaning needs school approval.
-- Parent FAQs contain verified public facts. New claims about tuition, teaching policies or admission rules require approved CMS content.
-- `llms.txt` is an optional public summary, not a guaranteed SEO or AI ranking mechanism.
+- Parent FAQs contain verified public facts. Tuition and enrollment requirements stay as owner TODOs until the school supplies approved wording. New claims about fees, teaching policies or admission rules require approved CMS content.
+- The public Discovery Drivers slug is `/programs/discovery-drivers`. The website 301-redirects the CMS typo `/programs/discovery-driveres` and rewrites that slug in links, the sitemap and `llms.txt`.
+- `llms.txt` is a short public summary and `llms-full.txt` repeats the program facts and parent Q&A. Neither is a guaranteed SEO or AI ranking mechanism.
 - The wildcard robots policy preserves public crawler access. Search and model-training permission are separate business decisions. Private CMS resources retain their existing authentication and are not listed in the sitemap.
 
 After an approved release, check live `/robots.txt`, `/sitemap.xml`, `/llms.txt`, canonical URLs and sharing images, submit the sitemap to the verified Google Search Console property, and rerun the same Framer scan.

@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { getArticle, getArticles } from '@/lib/api'
 import { serializeLexical } from '@/lib/lexical'
 import JsonLd from '@/components/JsonLd'
-import { pageMetadata } from '@/lib/seo'
+import { breadcrumbStructuredData, pageMetadata } from '@/lib/seo'
 import { contentDate, latestContentDate, pageUrl, recordPath, SCHOOL_ID, STATIC_CONTENT_UPDATED_AT } from '@/lib/seo-utils'
 
 export const revalidate = 3600
@@ -48,6 +48,11 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
         ...(article.author?.name && { author: { '@type': 'Person', name: article.author.name } }),
         ...(datePublished && { datePublished }), ...(dateModified && { dateModified }),
       }} />
+      <JsonLd data={breadcrumbStructuredData([
+        { name: 'Home', path: '/' },
+        { name: 'Articles', path: '/articles' },
+        { name: article.title, path: recordPath('articles', slug) },
+      ])} />
       {/* Hero */}
       {article.heroImage?.url && (
         <div className="relative w-full" style={{ aspectRatio: '21/9', background: '#f3f4f6', maxHeight: '480px', overflow: 'hidden' }}>
@@ -55,6 +60,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
             src={article.heroImage.url}
             alt={article.heroImage.alt || article.title}
             fill
+            sizes="(max-width: 768px) 100vw, 768px"
             className="object-cover"
             priority
           />

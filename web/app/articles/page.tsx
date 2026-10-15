@@ -1,5 +1,5 @@
 import JsonLd from '@/components/JsonLd'
-import { pageMetadata, webPageStructuredData } from '@/lib/seo'
+import { breadcrumbStructuredData, pageMetadata, webPageStructuredData } from '@/lib/seo'
 import { STATIC_CONTENT_UPDATED_AT } from '@/lib/seo-utils'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -28,6 +28,7 @@ export default async function ArticlesPage() {
   return (
     <div className="min-h-screen">
       <JsonLd data={webPageStructuredData('/articles', "Early Learning Articles and School News | Tiny Thinkers", STATIC_CONTENT_UPDATED_AT)} />
+      <JsonLd data={breadcrumbStructuredData([{ name: 'Home', path: '/' }, { name: 'Articles', path: '/articles' }])} />
       <section
         className="py-16 px-4 text-center"
         style={{ background: 'linear-gradient(135deg, #F0FFF8 0%, #FFF5FB 100%)' }}
@@ -63,6 +64,7 @@ export default async function ArticlesPage() {
                         src={a.heroImage.url}
                         alt={a.heroImage.alt || a.title}
                         fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 360px"
                         className="object-cover"
                       />
                     ) : (

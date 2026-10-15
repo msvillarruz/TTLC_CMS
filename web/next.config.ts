@@ -1,9 +1,14 @@
 import type { NextConfig } from 'next'
 import path from 'path'
+import { PERMANENT_REDIRECTS } from './lib/redirects.ts'
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../'),
+  async redirects() {
+    return PERMANENT_REDIRECTS
+  },
   images: {
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',

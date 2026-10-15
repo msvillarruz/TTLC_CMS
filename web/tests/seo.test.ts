@@ -1,7 +1,13 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { contentDate, latestContentDate, pageUrl, programAgeRange, programFocuses, recordPath, serializeJsonLd } from '../lib/seo-utils.ts'
+import { parentFaqs } from '../lib/faqs.ts'
+import { jsonLdIssues } from '../lib/jsonld.ts'
+import { llmsDocument } from '../lib/llms.ts'
+import { PERMANENT_REDIRECTS } from '../lib/redirects.ts'
+import { faqPageStructuredData, programCourseStructuredData, schoolStructuredData } from '../lib/seo.ts'
+import { canonicalFacebookUrl, canonicalProgramSlug, classSizeLabel, contentDate, displayPhone, formatAddress, latestContentDate, pageUrl, postalAddress, programAgeRange, programFocuses, programLookupSlugs, recordPath, SCHOOL_PHONE, serializeJsonLd, withCanonicalProgramSlug } from '../lib/seo-utils.ts'
 import { getArticle, getProgram, getSitemapContent } from '../lib/api.ts'
+import type { Program } from '../lib/api.ts'
 
 test('program outcomes support the CMS item field and legacy focus field without empty bullets', () => {
   assert.deepEqual(programFocuses({ focuses: [{ item: ' Literacy ' }, { focus: 'Social skills' }, { item: ' ' }, {}] }), ['Literacy', 'Social skills'])
@@ -58,6 +64,74 @@ test('sitemap discovery paginates all public collections and excludes drafts', a
 test('a CMS failure rejects sitemap discovery instead of returning a partial inventory', async (t) => {
   t.mock.method(globalThis, 'fetch', async () => new Response('Unavailable', { status: 503 }))
   await assert.rejects(getSitemapContent(), /CMS fetch failed/)
+})
+
+const sampleProgram = {
+  id: 3,
+  name: 'Discovery Drivers',
+  slug: 'discovery-driveres',
+  classType: 'Kinder Readiness',
+  ageMin: '4.5 Years',
+  ageMax: '5 Years',
+  ageRange: '4.5 years to 5 years old',
+  duration: '4 hours',
+  focuses: [],
+  schedule: '10:00 - 2:00PM',
+  classSize: '8',
+} satisfies Program
+
+test('the misspelled Discovery Drivers slug canonicalizes and redirects', () => {
+  assert.equal(canonicalProgramSlug('discovery-driveres'), 'discovery-drivers')
+  assert.equal(canonicalProgramSlug('discovery-drivers'), 'discovery-drivers')
+  assert.deepEqual(programLookupSlugs('discovery-drivers'), ['discovery-drivers', 'discovery-driveres'])
+  assert.equal(withCanonicalProgramSlug(sampleProgram).slug, 'discovery-drivers')
+  assert.equal(PERMANENT_REDIRECTS[0].source, '/programs/discovery-driveres')
+  assert.equal(PERMANENT_REDIRECTS[0].destination, '/programs/discovery-drivers')
+  assert.equal(PERMANENT_REDIRECTS[0].statusCode, 301)
+})
+
+test('school facts keep one phone, one Facebook profile, postal code and hours', () => {
+  assert.equal(displayPhone('0967 201 8214'), SCHOOL_PHONE)
+  assert.equal(displayPhone('+63 967 201 8214'), SCHOOL_PHONE)
+  assert.equal(formatAddress('113 West Avenue Brgy. Bungad, Quezon City'), '113 West Avenue Brgy. Bungad, Quezon City 1105')
+  assert.equal(postalAddress('113 West Avenue Brgy. Bungad, Quezon City').postalCode, '1105')
+  assert.equal(postalAddress('113 West Avenue Brgy. Bungad, Quezon City').streetAddress, '113 West Avenue Brgy. Bungad')
+  assert.equal(canonicalFacebookUrl('https://www.facebook.com/share/1BDRvgw8Ud/'), 'https://www.facebook.com/TTLCph/')
+  assert.equal(canonicalFacebookUrl('https://www.facebook.com/tinythinkersph'), 'https://www.facebook.com/TTLCph/')
+  assert.equal(canonicalFacebookUrl(), 'https://www.facebook.com/TTLCph/')
+  assert.equal(classSizeLabel('8'), 'Maximum of 8 children')
+  const school = schoolStructuredData({ facebookUrl: 'https://www.facebook.com/share/1BDRvgw8Ud/', phone: '09672018214', address: '113 West Avenue Brgy. Bungad, Quezon City' })
+  assert.deepEqual(jsonLdIssues(school), [])
+  const schoolNode = school['@graph'].find((node) => Array.isArray(node['@type']))
+  assert.deepEqual(schoolNode && 'sameAs' in schoolNode ? schoolNode.sameAs : [], ['https://www.facebook.com/TTLCph/'])
+  assert.equal(JSON.stringify(school).includes('285270287994540'), false)
+})
+
+test('parent FAQs stay within 8-12, publish no tuition amount, and mark missing owner facts', () => {
+  const faqs = parentFaqs([withCanonicalProgramSlug(sampleProgram)], { address: '113 West Avenue Brgy. Bungad, Quezon City', phone: '+63 967 201 8214' })
+  assert.ok(faqs.length >= 8 && faqs.length <= 12)
+  const schema = faqPageStructuredData(faqs)
+  assert.deepEqual(jsonLdIssues(schema), [])
+  const tuition = faqs.find((faq) => faq.id === 'tuition')
+  const requirements = faqs.find((faq) => faq.id === 'requirements')
+  assert.match(tuition?.ownerTodo || '', /TODO\(owner\)/)
+  assert.match(requirements?.ownerTodo || '', /TODO\(owner\)/)
+  const published = JSON.stringify(schema)
+  assert.equal(published.includes('TODO'), false)
+  for (const id of ['tuition', 'requirements']) {
+    const text = schema.mainEntity.find((question) => question.name === faqs.find((faq) => faq.id === id)?.question)?.acceptedAnswer.text || ''
+    assert.equal(/\d|₱|php|pesos/i.test(text), false, id)
+  }
+  assert.match(published, /4\.5 years to 5 years old/)
+  assert.match(published, /discovery-drivers/)
+  assert.equal(published.includes('discovery-driveres'), false)
+  const course = programCourseStructuredData(withCanonicalProgramSlug(sampleProgram))
+  assert.deepEqual(jsonLdIssues(course), [])
+  const summary = llmsDocument({ facebookUrl: 'https://www.facebook.com/share/1BDRvgw8Ud/' }, [sampleProgram], true)
+  assert.match(summary, /\/programs\/discovery-drivers/)
+  assert.equal(summary.includes('discovery-driveres'), false)
+  assert.equal(summary.includes('TODO'), false)
+  assert.match(summary, /Monday to Saturday, 8:00 AM to 5:00 PM/)
 })
 
 test('slug input cannot alter CMS filters', async (t) => {

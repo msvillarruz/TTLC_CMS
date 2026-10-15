@@ -75,6 +75,8 @@ export const PROGRAMS_SEED = [
   },
   {
     name: 'Discovery Drivers',
+    // Public canonical slug. The live CMS record was saved as "discovery-driveres";
+    // the website 301s that typo and rewrites it when reading. Keep this spelling in the CMS.
     slug: 'discovery-drivers',
     classType: 'Kinder Readiness',
     programType: 'kinder-readiness',

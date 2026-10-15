@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getProgram, getPrograms, resolveColor } from '@/lib/api'
 import JsonLd from '@/components/JsonLd'
-import { pageMetadata, webPageStructuredData } from '@/lib/seo'
+import { breadcrumbStructuredData, pageMetadata, programCourseStructuredData, programDescription, webPageStructuredData } from '@/lib/seo'
 import { latestContentDate, programAgeRange, programFocuses, recordPath, STATIC_CONTENT_UPDATED_AT } from '@/lib/seo-utils'
 
 export const revalidate = 3600
@@ -18,9 +18,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const program = await getProgram(slug).catch(() => null)
   if (!program) return { title: 'Program — Tiny Thinkers Learning Center' }
   return pageMetadata({
-    path: recordPath('programs', slug),
+    path: recordPath('programs', program.slug),
     title: `${program.classType} in Quezon City | ${program.name}`,
-    description: program.description || `${program.name}: ${program.classType} for ${programAgeRange(program)} at Tiny Thinkers in Quezon City. View the schedule and book a free trial.`,
+    description: programDescription(program),
     image: program.heroImage,
   })
 }
@@ -36,7 +36,13 @@ export default async function ProgramDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="min-h-screen">
-      <JsonLd data={webPageStructuredData(recordPath('programs', slug), program.name, latestContentDate(STATIC_CONTENT_UPDATED_AT, program.updatedAt))} />
+      <JsonLd data={webPageStructuredData(recordPath('programs', program.slug), program.name, latestContentDate(STATIC_CONTENT_UPDATED_AT, program.updatedAt))} />
+      <JsonLd data={breadcrumbStructuredData([
+        { name: 'Home', path: '/' },
+        { name: 'Programs', path: '/programs' },
+        { name: program.name, path: recordPath('programs', program.slug) },
+      ])} />
+      <JsonLd data={programCourseStructuredData(program)} />
       {/* Hero */}
       <section
         className="py-16 px-4"

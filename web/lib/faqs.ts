@@ -114,8 +114,8 @@ export function parentFaqs(programs: Program[], settings: SiteSettings): FaqEntr
       id: 'class-times',
       question: 'What time are the classes?',
       answer: times.length
-        ? 'Class times depend on the program.'
-        : 'Class times are listed on the program pages.',
+        ? 'Class times depend on the program. There are no Saturday classes.'
+        : 'Class times are listed on the program pages. There are no Saturday classes.',
       bullets: times,
       links: [{ label: 'See program schedules', href: '/programs' }],
     },

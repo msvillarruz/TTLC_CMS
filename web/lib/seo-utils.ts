@@ -7,7 +7,7 @@ export const SITE_DESCRIPTION = 'Play-based learning in Quezon City. Explore tod
 
 // This release changes page content and structured data. Advance this reviewed
 // date only when these static pages receive a significant content/schema update.
-export const STATIC_CONTENT_UPDATED_AT = '2026-10-15'
+export const STATIC_CONTENT_UPDATED_AT = '2026-10-16'
 
 export const SCHOOL_PHONE = '+63 967 201 8214'
 export const SCHOOL_EMAIL = 'hello@tinythinkers.edu.ph'

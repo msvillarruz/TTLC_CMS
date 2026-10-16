@@ -114,6 +114,8 @@ test('parent FAQs stay within 8-12, publish no tuition amount, and mark missing 
   assert.deepEqual(jsonLdIssues(schema), [])
   const tuition = faqs.find((faq) => faq.id === 'tuition')
   const requirements = faqs.find((faq) => faq.id === 'requirements')
+  const classTimes = faqs.find((faq) => faq.id === 'class-times')
+  assert.match(classTimes?.answer || '', /no Saturday classes/i)
   assert.match(tuition?.ownerTodo || '', /TODO\(owner\)/)
   assert.match(requirements?.ownerTodo || '', /TODO\(owner\)/)
   const published = JSON.stringify(schema)

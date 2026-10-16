@@ -88,7 +88,7 @@ try {
     }
     if (path === '/llms.txt' || path === '/llms-full.txt') {
       const text = await response.text()
-      assert.match(text, /Monday to Saturday, 8:00 AM to 5:00 PM/)
+      assert.match(text, /Monday to Friday, 8:00 AM to 5:00 PM; closed Saturdays/)
       assert.match(text, /\/programs\/discovery-drivers/)
       assert.equal(text.includes('discovery-driveres'), false)
       assert.equal(text.includes('TODO'), false)

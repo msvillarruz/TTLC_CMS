@@ -105,6 +105,8 @@ test('school facts keep one phone, one Facebook profile, postal code and hours',
   const schoolNode = school['@graph'].find((node) => Array.isArray(node['@type']))
   assert.deepEqual(schoolNode && 'sameAs' in schoolNode ? schoolNode.sameAs : [], ['https://www.facebook.com/TTLCph/'])
   assert.equal(JSON.stringify(school).includes('285270287994540'), false)
+  const schoolHours = schoolNode && 'openingHoursSpecification' in schoolNode ? schoolNode.openingHoursSpecification : undefined
+  assert.deepEqual(schoolHours && typeof schoolHours === 'object' && 'dayOfWeek' in schoolHours ? schoolHours.dayOfWeek : [], ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'])
 })
 
 test('parent FAQs stay within 8-12, publish no tuition amount, and mark missing owner facts', () => {
@@ -115,7 +117,9 @@ test('parent FAQs stay within 8-12, publish no tuition amount, and mark missing 
   const tuition = faqs.find((faq) => faq.id === 'tuition')
   const requirements = faqs.find((faq) => faq.id === 'requirements')
   const classTimes = faqs.find((faq) => faq.id === 'class-times')
+  const centerHours = faqs.find((faq) => faq.id === 'hours')
   assert.match(classTimes?.answer || '', /no Saturday classes/i)
+  assert.match(centerHours?.answer || '', /closed Saturdays/i)
   assert.match(tuition?.ownerTodo || '', /TODO\(owner\)/)
   assert.match(requirements?.ownerTodo || '', /TODO\(owner\)/)
   const published = JSON.stringify(schema)
@@ -133,7 +137,7 @@ test('parent FAQs stay within 8-12, publish no tuition amount, and mark missing 
   assert.match(summary, /\/programs\/discovery-drivers/)
   assert.equal(summary.includes('discovery-driveres'), false)
   assert.equal(summary.includes('TODO'), false)
-  assert.match(summary, /Monday to Saturday, 8:00 AM to 5:00 PM/)
+  assert.match(summary, /Monday to Friday, 8:00 AM to 5:00 PM; closed Saturdays/)
 })
 
 test('slug input cannot alter CMS filters', async (t) => {

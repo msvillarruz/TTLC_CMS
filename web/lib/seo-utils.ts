@@ -17,12 +17,12 @@ export const SCHOOL_ADDRESS_FALLBACK = '113 West Avenue, Brgy. Bungad, Quezon Ci
 // Month precision only. The site says the school opened in August 2024, not a specific day.
 export const SCHOOL_FOUNDED = '2024-08'
 export const SCHOOL_FOUNDED_LABEL = 'August 2024'
-// Center hours from the Google Business Profile listing (Mon–Sat 08:00–17:00).
+// Weekday hours follow the CMS schedule; the center is closed Saturdays.
 export const SCHOOL_HOURS = {
-  days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] as const,
+  days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'] as const,
   opens: '08:00',
   closes: '17:00',
-  label: 'Monday to Saturday, 8:00 AM to 5:00 PM',
+  label: 'Monday to Friday, 8:00 AM to 5:00 PM; closed Saturdays',
 }
 // Approximate pin for 113 West Avenue, Brgy. Bungad. Not a new survey.
 export const SCHOOL_GEO = { latitude: 14.6514, longitude: 121.0289 }

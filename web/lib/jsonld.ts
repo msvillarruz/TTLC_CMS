@@ -54,8 +54,9 @@ export function jsonLdIssues(data: unknown): string[] {
       if (typeof geo?.latitude !== 'number' || typeof geo?.longitude !== 'number') issues.push('School geo must be numeric')
       const hours = isRecord(node.openingHoursSpecification) ? node.openingHoursSpecification : undefined
       const days = Array.isArray(hours?.dayOfWeek) ? hours.dayOfWeek : []
-      if (!days.includes('Monday') || !days.includes('Saturday') || days.includes('Sunday')) {
-        issues.push('Opening hours must be Monday through Saturday')
+      const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+      if (days.length !== weekdays.length || weekdays.some((day) => !days.includes(day))) {
+        issues.push('Opening hours must be Monday through Friday only')
       }
       if (hours?.opens !== '08:00' || hours?.closes !== '17:00') issues.push('Opening hours must be 08:00-17:00')
     }

@@ -122,7 +122,7 @@ export function parentFaqs(programs: Program[], settings: SiteSettings): FaqEntr
     {
       id: 'hours',
       question: "What are the center's hours?",
-      answer: `The center is open ${SCHOOL_HOURS.label}.`,
+      answer: `Hours are ${SCHOOL_HOURS.label}.`,
     },
     {
       id: 'trial',

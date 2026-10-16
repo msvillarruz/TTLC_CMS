@@ -1,3 +1,5 @@
+export const HOME_H1_SUBTITLE = 'Play-based preschool in Quezon City'
+
 export const OBJECTIVES = [
   { icon: '🧩', title: 'Play-Based Learning', desc: 'Create a play-based and student-focused learning system for very young children.' },
   { icon: '🛡️', title: 'Safe Environment', desc: 'Provide a safe and healthy space where children can connect and communicate with their peers.' },

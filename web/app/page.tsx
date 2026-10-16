@@ -3,10 +3,11 @@ import Image from 'next/image'
 import { getPrograms, getAuthors, getSiteSettings, getHomePage, getTestimonials } from '@/lib/api'
 import ProgramCard from '@/components/ProgramCard'
 import HeroCarousel from '@/components/HeroCarousel'
-import { OBJECTIVES, PROGRAM_COLORS } from '@/lib/content'
+import { HOME_H1_SUBTITLE, OBJECTIVES, PROGRAM_COLORS } from '@/lib/content'
 import ParentFAQ from '@/components/ParentFAQ'
 import JsonLd from '@/components/JsonLd'
-import { pageMetadata, webPageStructuredData } from '@/lib/seo'
+import { parentFaqs } from '@/lib/faqs'
+import { faqPageStructuredData, pageMetadata, webPageStructuredData } from '@/lib/seo'
 import { latestContentDate, STATIC_CONTENT_UPDATED_AT, SITE_DESCRIPTION } from '@/lib/seo-utils'
 
 export const revalidate = 3600
@@ -67,6 +68,7 @@ export default async function HomePage() {
 
   const headline = homePage.heroHeadline || "Your child's best beginning"
   const subline = homePage.heroSubline || 'A play-based learning center dedicated to fostering curiosity, creativity, and confidence in every child.'
+  const faqs = parentFaqs(programs, settings)
 
   const featuredAuthors = featuredNames
     .map((name) => authors.find((a) => a.name === name))
@@ -76,6 +78,7 @@ export default async function HomePage() {
   return (
     <>
       <JsonLd data={webPageStructuredData('/', 'Tiny Thinkers Learning Center', latestContentDate(STATIC_CONTENT_UPDATED_AT, settings.updatedAt, homePage.updatedAt, ...programs.map((p) => p.updatedAt)))} />
+      <JsonLd data={faqPageStructuredData(faqs)} />
       {/* HERO */}
       <section
         className="relative overflow-hidden py-20 px-4 animate-fade-up"
@@ -92,12 +95,14 @@ export default async function HomePage() {
                 🌱 Enrollment On-going
               </span>
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-ink mb-6 leading-tight">
-                {headline}
+                <span className="block">{headline}</span>
+                <span className="mt-3 block text-xl font-extrabold leading-snug text-teal sm:text-2xl md:text-3xl">
+                  {HOME_H1_SUBTITLE}
+                </span>
               </h1>
               <p className="text-lg sm:text-xl text-ink/70 max-w-lg mb-10 leading-relaxed">
                 {subline}
               </p>
-              <p className="text-sm font-bold text-teal mb-6">Play-based learning on West Avenue, Quezon City.</p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/contact"
@@ -119,13 +124,15 @@ export default async function HomePage() {
             <HeroCarousel
               cmsImages={[
                 ...(homePage.heroImage?.url
-                  ? [{ src: homePage.heroImage.url, alt: homePage.heroImage.alt || 'Tiny Thinkers Learning Center' }]
+                  ? [{ src: homePage.heroImage.url, alt: homePage.heroImage.alt || 'Tiny Thinkers Learning Center', width: homePage.heroImage.width, height: homePage.heroImage.height }]
                   : []),
                 ...(homePage.heroImages
                   ?.filter((item) => Boolean(item.image?.url))
                   .map((item) => ({
                     src: item.image.url,
                     alt: item.image.alt || 'Tiny Thinkers Learning Center',
+                    width: item.image.width,
+                    height: item.image.height,
                   })) ?? []),
               ]}
             />
@@ -247,6 +254,7 @@ export default async function HomePage() {
                           alt={a.photo.alt || a.name}
                           width={80}
                           height={80}
+                          sizes="80px"
                           className="w-full h-full object-cover"
                         />
                       ) : (
@@ -452,7 +460,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <ParentFAQ programs={programs} settings={settings} />
+      <ParentFAQ faqs={faqs} />
 
       {/* FOOTER CTA */}
       <section

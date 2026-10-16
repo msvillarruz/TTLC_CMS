@@ -1,7 +1,9 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
+import { SCHOOL_MAPS_URL } from '@/lib/seo-utils'
 
 const links = [
   { label: 'Programs', href: '/programs' },
@@ -11,7 +13,7 @@ const links = [
   { label: 'Contact', href: '/contact' },
 ]
 
-export default function Nav({ logoUrl }: { logoUrl?: string }) {
+export default function Nav({ logoUrl, mapsUrl }: { logoUrl?: string; mapsUrl?: string }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -22,11 +24,14 @@ export default function Nav({ logoUrl }: { logoUrl?: string }) {
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           {logoUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={logoUrl}
               alt="Tiny Thinkers Learning Center"
-              style={{ height: '80px', width: 'auto', objectFit: 'contain' }}
+              width={160}
+              height={80}
+              priority
+              sizes="160px"
+              className="h-20 w-auto object-contain"
             />
           ) : (
             <>
@@ -52,7 +57,7 @@ export default function Nav({ logoUrl }: { logoUrl?: string }) {
             </Link>
           ))}
           <a
-            href="https://maps.app.goo.gl/biZYdEPbPY3UBAxA7"
+            href={mapsUrl || SCHOOL_MAPS_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm font-bold text-ink hover:text-pink transition-colors"
@@ -100,7 +105,7 @@ export default function Nav({ logoUrl }: { logoUrl?: string }) {
           </Link>
         ))}
         <a
-          href="https://maps.app.goo.gl/biZYdEPbPY3UBAxA7"
+          href={mapsUrl || SCHOOL_MAPS_URL}
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => setOpen(false)}

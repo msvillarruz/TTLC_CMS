@@ -11,9 +11,11 @@ import { SITE_URL } from '@/lib/seo-utils'
 
 const nunito = Nunito({
   subsets: ['latin'],
-  weight: ['400', '600', '700', '800', '900'],
+  weight: 'variable',
   variable: '--font-nunito',
   display: 'swap',
+  adjustFontFallback: true,
+  preload: true,
 })
 
 export const metadata: Metadata = {
@@ -30,11 +32,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const footerLogoUrl = settings.footerLogo?.url
 
   return (
-    <html lang="en" className={nunito.variable}>
+    <html lang="en-PH" className={nunito.variable}>
       <body>
         <JsonLd data={schoolStructuredData(settings)} />
         <AnnouncementTicker />
-        <Nav logoUrl={logoUrl} />
+        <Nav logoUrl={logoUrl} mapsUrl={settings.googleMapsUrl} />
         <main>{children}</main>
         <Footer programs={programs} logoUrl={logoUrl} footerLogoUrl={footerLogoUrl} settings={settings} />
       </body>

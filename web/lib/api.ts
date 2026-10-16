@@ -1,3 +1,5 @@
+import { programLookupSlugs, withCanonicalProgramSlug } from './seo-utils.ts'
+
 const CMS = process.env.NEXT_PUBLIC_CMS_URL || 'https://cms.tinythinkers.edu.ph'
 const R2_PUBLIC_URL = process.env.NEXT_PUBLIC_R2_PUBLIC_URL || ''
 
@@ -60,8 +62,8 @@ export type HomePage = {
   updatedAt?: string
   heroHeadline?: string
   heroSubline?: string
-  heroImage?: { url: string; alt?: string }
-  heroImages?: { image: { url: string; alt?: string } }[]
+  heroImage?: { url: string; alt?: string; width?: number; height?: number }
+  heroImages?: { image: { url: string; alt?: string; width?: number; height?: number } }[]
 }
 
 export type Announcement = {
@@ -144,12 +146,15 @@ async function fetchCMS<T>(path: string, revalidate = 3600): Promise<T> {
 
 export async function getPrograms(): Promise<Program[]> {
   const data = await fetchCMS<{ docs: Program[] }>('/programs?limit=100&sort=createdAt')
-  return data.docs
+  return data.docs.map(withCanonicalProgramSlug)
 }
 
 export async function getProgram(slug: string): Promise<Program | null> {
-  const data = await fetchCMS<{ docs: Program[] }>(`/programs?where[slug][equals]=${encodeURIComponent(slug)}&limit=1`)
-  return data.docs[0] ?? null
+  for (const candidate of programLookupSlugs(slug)) {
+    const data = await fetchCMS<{ docs: Program[] }>(`/programs?where[slug][equals]=${encodeURIComponent(candidate)}&limit=1`)
+    if (data.docs[0]) return withCanonicalProgramSlug(data.docs[0])
+  }
+  return null
 }
 
 export async function getAuthors(): Promise<Author[]> {
@@ -225,7 +230,11 @@ export async function getSitemapContent() {
     getAllPublicRecords<Article>('articles', '&where[status][equals]=published'),
     getAllPublicRecords<Event>('events'),
   ])
-  return { programs, articles: articles.filter((a) => a.status === 'published'), events }
+  return {
+    programs: programs.map(withCanonicalProgramSlug),
+    articles: articles.filter((a) => a.status === 'published'),
+    events,
+  }
 }
 
 export async function getTestimonials(): Promise<Testimonial[]> {

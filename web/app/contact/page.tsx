@@ -1,6 +1,6 @@
 import JsonLd from '@/components/JsonLd'
-import { pageMetadata, webPageStructuredData } from '@/lib/seo'
-import { STATIC_CONTENT_UPDATED_AT } from '@/lib/seo-utils'
+import { breadcrumbStructuredData, pageMetadata, webPageStructuredData } from '@/lib/seo'
+import { displayPhone, formatAddress, phoneHref, SCHOOL_EMAIL, SCHOOL_HOURS, SCHOOL_MAPS_URL, STATIC_CONTENT_UPDATED_AT } from '@/lib/seo-utils'
 import { getPrograms, getSiteSettings } from '@/lib/api'
 import ContactForm from './ContactForm'
 
@@ -19,6 +19,7 @@ export default async function ContactPage() {
   return (
     <div className="min-h-screen">
       <JsonLd data={webPageStructuredData('/contact', "Book a Free Trial Class in Quezon City | Tiny Thinkers", STATIC_CONTENT_UPDATED_AT)} />
+      <JsonLd data={breadcrumbStructuredData([{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact' }])} />
       {/* Header */}
       <section
         className="py-16 px-4 text-center"
@@ -47,14 +48,12 @@ export default async function ContactPage() {
             >
               <h3 className="font-extrabold text-ink mb-4">Contact Us</h3>
               <div className="space-y-3 text-sm text-ink/70">
-                {settings.address && (
-                  <p className="flex gap-2">
-                    <span>📍</span>
-                    <span>{settings.address}</span>
-                  </p>
-                )}
+                <p className="flex gap-2">
+                  <span>📍</span>
+                  <span>{formatAddress(settings.address)}</span>
+                </p>
                 <a
-                  href={settings.googleMapsUrl || 'https://maps.app.goo.gl/biZYdEPbPY3UBAxA7'}
+                  href={settings.googleMapsUrl || SCHOOL_MAPS_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm font-bold transition-colors hover:opacity-70"
@@ -62,30 +61,22 @@ export default async function ContactPage() {
                 >
                   View on Google Maps →
                 </a>
-                {settings.phone && (
-                  <p className="flex gap-2">
-                    <span>📞</span>
-                    <a href={`tel:${settings.phone}`} className="hover:text-pink transition-colors">
-                      {settings.phone}
-                    </a>
-                  </p>
-                )}
-                {settings.email && (
-                  <p className="flex gap-2">
-                    <span>✉️</span>
-                    <a href={`mailto:${settings.email}`} className="hover:text-pink transition-colors">
-                      {settings.email}
-                    </a>
-                  </p>
-                )}
-                {!settings.address && !settings.phone && !settings.email && (
-                  <p className="flex gap-2">
-                    <span>✉️</span>
-                    <a href="mailto:hello@tinythinkers.edu.ph" className="hover:text-pink transition-colors">
-                      hello@tinythinkers.edu.ph
-                    </a>
-                  </p>
-                )}
+                <p className="flex gap-2">
+                  <span>🗓️</span>
+                  <span>{SCHOOL_HOURS.label}</span>
+                </p>
+                <p className="flex gap-2">
+                  <span>📞</span>
+                  <a href={phoneHref(settings.phone)} className="hover:text-pink transition-colors">
+                    {displayPhone(settings.phone)}
+                  </a>
+                </p>
+                <p className="flex gap-2">
+                  <span>✉️</span>
+                  <a href={`mailto:${settings.email || SCHOOL_EMAIL}`} className="hover:text-pink transition-colors">
+                    {settings.email || SCHOOL_EMAIL}
+                  </a>
+                </p>
               </div>
             </div>
 

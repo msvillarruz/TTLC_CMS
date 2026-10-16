@@ -23,7 +23,10 @@ export const Programs: CollectionConfig = {
       type: 'text',
       required: true,
       unique: true,
-      admin: { placeholder: 'e.g. brainy-bunch' },
+      admin: {
+        placeholder: 'e.g. brainy-bunch',
+        description: 'Public URL slug. Discovery Drivers is discovery-drivers, not discovery-driveres.',
+      },
     },
     {
       name: 'classType',

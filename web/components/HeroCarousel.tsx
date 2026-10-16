@@ -4,10 +4,17 @@ import Image from 'next/image'
 import { useState, useEffect, useCallback } from 'react'
 
 // Add photo URLs here as real school photos become available
-const EXTRA_IMAGES: { src: string; alt: string }[] = []
+const EXTRA_IMAGES: HeroSlide[] = []
+
+interface HeroSlide {
+  src: string
+  alt: string
+  width?: number
+  height?: number
+}
 
 interface HeroCarouselProps {
-  cmsImages?: { src: string; alt: string }[]
+  cmsImages?: HeroSlide[]
 }
 
 export default function HeroCarousel({ cmsImages = [] }: HeroCarouselProps) {
@@ -68,10 +75,10 @@ export default function HeroCarousel({ cmsImages = [] }: HeroCarouselProps) {
           <Image
             src={img.src}
             alt={img.alt || `School photo ${i + 1}`}
-            width={0}
-            height={0}
-            sizes="(max-width: 768px) 100vw, 50vw"
-            style={{ width: '100%', height: 'auto', display: 'block' }}
+            width={img.width || 1080}
+            height={img.height || 1080}
+            sizes="(max-width: 1024px) 100vw, 560px"
+            className="h-auto w-full"
             priority={i === 0}
           />
         </div>

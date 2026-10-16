@@ -1,5 +1,7 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import type { Program, SiteSettings } from '@/lib/api'
+import { canonicalFacebookUrl, displayPhone, formatAddress, phoneHref, SCHOOL_EMAIL, SCHOOL_MAPS_URL } from '@/lib/seo-utils'
 
 const schoolLinks = [
   { label: 'About Us', href: '/about' },
@@ -10,7 +12,7 @@ const schoolLinks = [
 const socialLinks = [
   {
     label: 'Facebook',
-    href: 'https://www.facebook.com/tinythinkersph',
+    href: canonicalFacebookUrl(),
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -28,11 +30,13 @@ export default function Footer({ programs, logoUrl, footerLogoUrl, settings }: {
           {/* Brand */}
           <div className="md:col-span-1">
             {displayLogoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={displayLogoUrl}
                 alt="Tiny Thinkers Learning Center"
-                style={{ height: '120px', width: 'auto', objectFit: 'contain', marginBottom: '12px' }}
+                width={96}
+                height={120}
+                sizes="96px"
+                className="mb-3 h-[120px] w-auto object-contain"
               />
             ) : (
               <>
@@ -111,7 +115,7 @@ export default function Footer({ programs, logoUrl, footerLogoUrl, settings }: {
               {socialLinks.map((s) => (
                 <li key={s.label}>
                   <a
-                    href={settings.facebookUrl || s.href}
+                    href={canonicalFacebookUrl(settings.facebookUrl)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-sm text-white/60 hover:text-pink transition-colors"
@@ -123,21 +127,29 @@ export default function Footer({ programs, logoUrl, footerLogoUrl, settings }: {
               ))}
               <li>
                 <a
-                  href={settings.googleMapsUrl || 'https://maps.app.goo.gl/biZYdEPbPY3UBAxA7'}
+                  href={settings.googleMapsUrl || SCHOOL_MAPS_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-2 text-sm text-white/60 hover:text-pink transition-colors"
                 >
                   <span>📍</span>
-                  <span>{settings.address || '113 West Avenue Brgy. Bungad, Quezon City'}</span>
+                  <span>{formatAddress(settings.address)}</span>
                 </a>
               </li>
               <li>
                 <a
-                  href={`mailto:${settings.email || 'hello@tinythinkers.edu.ph'}`}
+                  href={`mailto:${settings.email || SCHOOL_EMAIL}`}
                   className="text-sm text-white/60 hover:text-pink transition-colors"
                 >
-                  {settings.email || 'hello@tinythinkers.edu.ph'}
+                  {settings.email || SCHOOL_EMAIL}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={phoneHref(settings.phone)}
+                  className="text-sm text-white/60 hover:text-pink transition-colors"
+                >
+                  {displayPhone(settings.phone)}
                 </a>
               </li>
             </ul>

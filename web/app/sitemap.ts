@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { getHomePage, getSiteSettings, getSitemapContent } from '@/lib/api'
+import { getAnnouncements, getHomePage, getSiteSettings, getSitemapContent } from '@/lib/api'
 import { contentDate, latestContentDate, pageUrl, recordPath, STATIC_CONTENT_UPDATED_AT } from '@/lib/seo-utils'
 
 // Fetch at request time so content changes do not require a website rebuild.
@@ -7,8 +7,8 @@ import { contentDate, latestContentDate, pageUrl, recordPath, STATIC_CONTENT_UPD
 export const dynamic = 'force-dynamic'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [{ programs, articles, events }, home, settings] = await Promise.all([
-    getSitemapContent(), getHomePage(), getSiteSettings(),
+  const [{ programs, articles, events }, home, settings, announcements] = await Promise.all([
+    getSitemapContent(), getHomePage(), getSiteSettings(), getAnnouncements(),
   ])
   const baseDate = latestContentDate(STATIC_CONTENT_UPDATED_AT, settings.updatedAt)
   const entry = (path: string, updatedAt?: string): MetadataRoute.Sitemap[number] => {
@@ -21,8 +21,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry('/programs', latestContentDate(baseDate, ...programs.map((p) => p.updatedAt))),
     entry('/articles', latestContentDate(baseDate, ...articles.map((a) => a.updatedAt))),
     entry('/events', latestContentDate(baseDate, ...events.map((e) => e.updatedAt))),
-    // Announcements change independently; omit a date without a complete history.
-    entry('/announcements'),
+    entry('/announcements', latestContentDate(...announcements.map((announcement) => announcement.updatedAt))),
     ...programs.map((p) => entry(recordPath('programs', p.slug), latestContentDate(STATIC_CONTENT_UPDATED_AT, p.updatedAt))),
     ...articles.map((a) => entry(recordPath('articles', a.slug), latestContentDate(STATIC_CONTENT_UPDATED_AT, a.updatedAt))),
     ...events.map((e) => entry(recordPath('events', e.slug), latestContentDate(STATIC_CONTENT_UPDATED_AT, e.updatedAt))),

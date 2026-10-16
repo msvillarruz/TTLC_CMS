@@ -157,9 +157,9 @@ export function parentFaqs(programs: Program[], settings: SiteSettings): FaqEntr
     {
       id: 'requirements',
       question: 'What are the enrollment requirements?',
-      answer: 'Contact the school for the current enrollment requirements.',
+      answer: "Please share your child's date of birth and the program you're considering so we can confirm the right class and current requirements.",
       links: [{ label: 'Contact the school', href: '/contact' }],
-      ownerTodo: 'TODO(owner): replace with the approved requirements checklist. Do not invent documents, age cutoffs, or forms.',
+      ownerTodo: 'TODO(owner): confirm the approved checklist, age cutoffs, and any assessment before publishing specific requirements.',
     },
   ]
 }

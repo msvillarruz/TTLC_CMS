@@ -86,8 +86,6 @@ export default buildConfig({
     }),
   ],
   cors: [
-    'http://eyuvq0lrx9nsuh0xo7e89brq.5.223.65.121.sslip.io',
-    'https://eyuvq0lrx9nsuh0xo7e89brq.5.223.65.121.sslip.io',
     'https://tinythinkers.edu.ph',
     'https://cms.tinythinkers.edu.ph',
   ],

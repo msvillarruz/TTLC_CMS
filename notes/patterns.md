@@ -27,8 +27,9 @@ Fix: ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS footer_logo_id INTEGER R
 Note: Column already existed — error was from stale container startup logs; self-resolved on container restart
 
 ## Infrastructure Reference
-- Server: root@5.223.65.121 (Hetzner)
-- CMS container filter: eyuvq
+- Server: root@204.168.248.73 (Hetzner, hostname ubuntu-4gb-hel1-1). Migrated from 5.223.65.121 (retired).
+- Coolify dashboard: http://204.168.248.73:8000 (app `ttlc-cms`, project TTLC)
+- CMS container filter / DB container name: changed with the migration; check `docker ps`
 - DB container: m10xrjirsfs459jpmhwzf5co | DB: ttlc_cms | user: postgres
 - Remap script: /usr/local/bin/ttlc-nginx-remap.sh | alias: ttlc-remap
 - Payload globals: flat field API even when schema uses tabs

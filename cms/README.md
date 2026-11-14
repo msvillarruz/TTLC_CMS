@@ -2,7 +2,7 @@
 
 Payload CMS 3 backend for Tiny Thinkers Learning Center.
 
-Deployed via Coolify on Hetzner CPX22 (Singapore).
+Deployed via Coolify on a Hetzner server (Helsinki, `ubuntu-4gb-hel1-1`, `204.168.248.73`).
 Serves content to the Next.js frontend at tinythinkers.edu.ph.
 
 ---
@@ -12,7 +12,7 @@ Serves content to the Next.js frontend at tinythinkers.edu.ph.
 - **CMS:** Payload 3 (Next.js-based)
 - **Database:** PostgreSQL 16
 - **Media:** Cloudflare R2 (via S3 adapter)
-- **Hosting:** Hetzner CPX22, Singapore — deployed via Coolify
+- **Hosting:** Hetzner (Helsinki) — deployed via Coolify, dashboard at `http://204.168.248.73:8000`
 - **Admin URL:** https://cms.tinythinkers.edu.ph
 
 ---
@@ -73,7 +73,12 @@ npm run dev
 
 ## Production deploy
 
-Managed by Coolify. Push to `main` → Coolify auto-deploys.
+Managed by Coolify. A push to `main` that touches `cms/**` runs `.github/workflows/deploy-cms.yml`:
+type check, then a `POST` to the Coolify deploy webhook, then a health check on
+`https://cms.tinythinkers.edu.ph/api/health`.
+
+Required GitHub Actions secrets: `COOLIFY_WEBHOOK_URL` (Coolify → ttlc-cms → Webhooks → Deploy
+webhook URL) and `COOLIFY_TOKEN` (Coolify → Keys & Tokens, **Deploy** permission, all resources).
 
 Environment variables are set in Coolify UI — not in this repo.
 
